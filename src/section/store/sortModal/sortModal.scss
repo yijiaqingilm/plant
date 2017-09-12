@@ -1,0 +1,98 @@
+@import "../../../css/global.scss";
+
+.sortModal {
+  @include setFontSize($baseFontSize);
+  .wrap {
+    position: absolute;
+    width: 100%;
+    z-index: 1001;
+    .sortlist {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 60px;
+      background: #eaeaea;
+      @include setFontSize($middleFontSize);
+      .sort {
+        flex: 0 0 33.33%;
+        width: 33.33%;
+        text-align: center;
+        background: url("../../../assets/icon_triangle.png") no-repeat;
+        background-position-x: 85%;
+        background-position-y: center;
+        background-size: 10px 10px; /*no*/
+        &.active {
+          color: $theme_color;
+          background: url("../../../assets/icon_active_triangle.png") no-repeat;
+          background-position-x: 90%;
+          background-position-y: center;
+          background-size: 10px 10px; /*no*/
+        }
+      }
+    }
+    .sortModal {
+      background: #FFFFFF;
+      padding: 30px 20px;
+      .menu-list {
+        width: 100%;
+        display: table;
+        > div {
+          width: 33.33%;
+          text-align: center;
+          float: left;
+          margin-top: 15px; /*no*/
+          &:nth-child(1), &:nth-child(2), &:nth-child(3) {
+            margin-top: 0;
+          }
+          &:nth-child(3n+1) {
+            text-align: left;
+          }
+          &:nth-child(3n+2) {
+            text-align: center;
+          }
+          &:nth-child(3n) {
+            text-align: right;
+          }
+          > span {
+            margin: 0 auto;
+            width: 77%;
+            height: 24px; /*no*/
+            line-height: 24px; /*no*/
+            @include setFontSize($miniFontSize);
+          }
+        }
+      }
+
+      .title {
+        color: #666;
+        margin-bottom: 5px; /*no*/
+        .order-list-button {
+          height: 24px; /*no*/
+          line-height: 24px; /*no*/
+        }
+      }
+      .zone-title {
+        color: #666;
+        padding: 20px 0;
+      }
+      .scene {
+        margin-right: 25px;
+      }
+
+      .price-zone {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
+    input {
+      @include setFontSize($baseFontSize);
+    }
+  }
+
+  .sort-mask {
+    top: 44px; /*no*/
+  }
+}
+

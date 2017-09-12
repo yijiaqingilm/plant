@@ -1,0 +1,33 @@
+@import "../globalFunc";
+
+.goods-list .goods-item .info .name {
+  width: 100%;
+  @include ellipsis;
+}
+
+.goods-item .info .create-time {
+  display: table;
+  width: 100%;
+  > div {
+    float: left;
+    &:first-child {
+      color: #999;
+      width: 30%;
+      @include ellipsis;
+    }
+    &:last-child {
+      width: 70%;
+      text-align: right;
+      color: #999;
+    }
+  }
+}
+
+.info {
+  > div {
+    margin-bottom: 5px; /*no*/
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

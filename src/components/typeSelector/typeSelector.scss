@@ -1,0 +1,11 @@
+@import "../../css/global.scss";
+
+.typeSelector{
+  .item {
+    margin-right: 30px;
+    &.no-bg{
+      background-color: #FFFFFF;
+      padding: 0;
+    }
+  }
+}

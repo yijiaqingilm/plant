@@ -1,0 +1,16 @@
+@import "../globalFunc";
+.orderBefore {
+  width: 100%;
+  @include setFontSize($baseFontSize);
+  text-align: center;
+  .header {
+    img {
+      width: 100%;
+    }
+  }
+  .hint {
+    padding: 75px 0;
+    @include setFontSize($maxFontSize);
+    color: $theme_color;
+  }
+}

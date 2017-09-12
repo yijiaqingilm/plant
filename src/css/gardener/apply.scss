@@ -1,0 +1,54 @@
+@import "../globalFunc";
+
+.apply {
+  .list-block {
+    .item-input {
+      text-align: right;
+      color: #999;
+    }
+    input[type="text"] {
+      text-align: right;
+      height: auto;
+      padding: 10px 0;
+      @include ellipsis;
+    }
+  }
+
+  .ul-form {
+    position: relative;
+    @include setFontSize($baseFontSize);
+    input, textarea {
+      @include setFontSize($baseFontSize)
+    }
+    .avatar {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 10px 0;
+    }
+
+  }
+
+  .submit {
+    text-align: center;
+    margin: 75px;
+  }
+
+  .wrap {
+    margin-top: 130px;
+    .apply-msg {
+      margin: 0 auto;
+      text-align: center;
+      color: $theme_color;
+      .header {
+        margin-bottom: 86px;
+        @include setFontSize($middleFontSize)
+      }
+      .footer {
+        @include setFontSize($baseFontSize);
+        padding-top: 25px;
+      }
+    }
+  }
+
+}

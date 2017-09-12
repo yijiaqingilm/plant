@@ -1,0 +1,35 @@
+@import "../globalFunc";
+.changePay{
+
+}
+.test{
+  width: 150px;
+  height: 80px;
+  border: 1px solid red;
+ // background:-webkit-linear-gradient(left,#ace,#f96);
+ // transform: skew(30deg,30deg);
+ // transform-origin: top left;
+
+}
+/*
+.testClass{
+  transition:all 5s ease 0.3s;
+  background: #f36;
+}*/
+
+.slide-fade-enter-active{
+  transition: all 1s ease;
+}
+.slide-fade-leave-to{
+  transition: all 1s ease;
+}
+.slide-fade-enter,.slide-fade-leave-to{
+  transform: translateX(100px);
+  opacity: 0;
+}
+.slide-fade-enter-to{
+  background: blue;
+}
+.slide-fade-leave{
+  background: red;
+}

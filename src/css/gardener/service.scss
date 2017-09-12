@@ -1,0 +1,67 @@
+@import "../globalFunc";
+
+.service {
+  @include setFontSize($baseFontSize);
+  @at-root .suggest {
+    @include setFontSize($baseFontSize);
+  }
+  .list {
+    position: relative;
+    padding: 35px 35px 0 35px;
+    > div {
+      padding-bottom: 20px;
+    }
+    .erweima {
+      position: absolute;
+      top: 10px;
+      right: 50px;
+
+      img {
+        width: 140px;
+        height: 140px;
+        display: block;
+        margin: 0 auto;
+      }
+      div:last-child {
+        @include setFontSize($miniFontSize);
+        text-align: center;
+        padding-top: 10px;
+        color: #999;
+      }
+    }
+  }
+  .list2 {
+    position: relative;
+    padding: 35px 35px 0 35px;
+    .group {
+      display: flex;
+      align-items: center;
+      .input {
+        input {
+          margin-left: 10px;
+          height: 44px;
+          line-height: 44px;
+          background-color: #fff;
+          box-sizing: border-box;
+          border: 1px solid #aaaaaa; /*no*/
+          background: none;
+          border-radius: 0 0 0 0;
+          box-shadow: none;
+        }
+      }
+    }
+    .advice {
+      margin-top: 20px;
+      padding-bottom: 20px;
+      .ad-footer {
+        color: #999;
+        text-align: right;
+        @include setFontSize($miniFontSize);
+      }
+    }
+    .submit {
+      margin-top: 90px;
+      text-align: center;
+    }
+  }
+}

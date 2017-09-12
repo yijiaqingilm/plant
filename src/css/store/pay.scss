@@ -1,0 +1,101 @@
+@import "../globalFunc";
+
+.pay {
+  @include setFontSize($baseFontSize);
+  .header {
+    .no-address {
+      margin: 0 auto;
+      text-align: center;
+      padding: 35px;
+    }
+    .address-list {
+      width: 100%;
+      display: flex;
+      padding: 35px;
+      .user-info {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        > div {
+          padding-bottom: 10px;
+          &:last-child {
+            padding-bottom: 0;
+          }
+        }
+        .detail {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+      .address-edit {
+        flex: 0 0 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .content {
+    margin-bottom: 50px; /*no*/
+    .goods-wrap {
+      .goods-type {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 35px;
+        background-color: #eaeaea;
+        @include setFontSize($middleFontSize);
+        &.lease-time {
+          border-top: 1px solid #FFFFFF; /*no*/
+        }
+      }
+      .goods-list {
+        .goods-item {
+          position: relative;
+          width: 100%;
+          display: flex;
+          padding: 25px 35px;
+          &:after {
+            @include onepx;
+          }
+          .goods-photo {
+            flex: 0 0 160px;
+            width: 160px;
+            height: 160px;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .goods-info {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-left: 25px;
+            @include setFontSize($baseFontSize);
+            .type{
+              color: #666666;
+              @include setFontSize($miniFontSize);
+              @include clamp;
+            }
+            .detail {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .price {
+                color: $warn_color;
+                @include setFontSize($middleFontSize);
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+}

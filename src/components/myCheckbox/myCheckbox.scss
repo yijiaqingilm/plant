@@ -1,0 +1,42 @@
+@import "../../css/global.scss";
+
+.my-checkbox {
+  position: relative;
+  display: inline-block;
+  &.theme-red {
+    $baseSize: 25px;
+    width: $baseSize; /*no*/
+    height: $baseSize; /*no*/
+
+    input + label {
+      width: $baseSize; /*no*/
+      height: $baseSize; /*no*/
+      border: 1px solid #999; /*no*/
+    }
+    input:checked + label {
+      background: url("icon_select_on2.png");
+      background-size: $baseSize $baseSize; /*no*/
+    }
+  }
+  input {
+    opacity: 0;
+  }
+  input + label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    display: inline-block;
+    width: 17px; /*no*/
+    height: 17px; /*no*/
+    border: 1px solid $theme_color; /*no*/
+    border-radius: 100%;
+
+  }
+  input:checked + label {
+    background: url("icon_select_on.png");
+    background-size: 17px 17px; /*no*/
+    border: 0;
+  }
+}
+

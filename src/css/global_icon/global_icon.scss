@@ -1,0 +1,49 @@
+@import "../globalFunc";
+
+.triangle {
+  display: inline-block;
+  width: 10px; /*no*/
+  height: 10px; /*no*/
+  background: url("../../assets/icon_active_triangle.png") no-repeat;
+  background-position-x: 90%;
+  background-position-y: center;
+  background-size: 10px 10px; /*no*/
+}
+
+@mixin baseProps {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+
+.icon_edit {
+  @include baseProps;
+  background: url("../../assets/address_edit.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.icon_remark{
+  @include baseProps;
+  background: url("../../assets/icon_remark2.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+
+
+.icon_del {
+  @include baseProps;
+  background: url("../../assets/address_del.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.phone_icon {
+  position: absolute;
+  top: -10px; /*no*/
+  right: -35px; /*no*/
+  display: inline-block;
+  width: 30px; /*no*/
+  height: 30px; /*no*/
+  background: url("../../assets/icon_phone.png") no-repeat;
+  background-size: 30px 30px; /*no*/
+}

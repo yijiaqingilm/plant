@@ -1,0 +1,56 @@
+.pull-down-header {
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  position: relative;
+  background-color: #666666;
+}
+
+.pull-down-content {
+  position: absolute;
+  max-width: 90%;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 40px;/*no*/
+  color: #d5d5d5;
+  text-align: center;
+  border-left: 20px solid transparent;
+  font-family: "noto-thin", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;/*no*/
+  &--icon {
+    float: left;
+    height: 20px;/*no*/
+    width: 20px;/*no*/
+    margin-top: 10px;/*no*/
+    margin-left: -20px;/*no*/
+    background: url(./down-arrow.png) no-repeat center center;
+    background-size: 20px 20px;/*no*/
+    &.pull-down-refresh {
+      background: url(./refresh-icon.png) no-repeat center center;
+      background-size: 20px 20px;/*no*/
+      animation: rotate 2s infinite;
+      animation-timing-function: linear;
+    }
+    &.pull-down-error {
+      background: url(./error-icon.png) no-repeat center center;
+      background-size: 20px 20px;/*no*/
+    }
+  }
+  &--label {
+    float: left;
+    height: 20px;/*no*/
+    line-height: 20px;/*no*/
+    margin-left: 10px;/*no*/
+    margin-top: 10px;/*no*/
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

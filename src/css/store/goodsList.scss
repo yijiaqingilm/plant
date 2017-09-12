@@ -1,0 +1,4 @@
+@import "../globalFunc";
+.goodsList {
+  @include setFontSize($baseFontSize);
+}

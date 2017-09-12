@@ -1,0 +1,72 @@
+@import "../globalFunc";
+
+.detail {
+  .wrap {
+    .header {
+      width: 100%;
+      padding: 50px 35px 35px 35px;
+      margin: 0 auto;
+      text-align: center;
+      > div:first-child {
+        @include setFontSize($middleFontSize);
+        color: $theme_color;
+      }
+      > div:last-child {
+        padding-top: 40px;
+        padding-left: 100px;
+        width: 100%;
+        text-align: left;
+        p {
+          height: 60px;
+          line-height: 60px;
+          @include ellipsis;
+        }
+        a {
+          color: black;
+        }
+        .phone {
+          position: relative;
+          span.icon_phone {
+            display: inline-block;
+            width: 30px; /*no*/
+            height: 30px; /*no*/
+            background: url("../../assets/icon_phone.png") no-repeat;
+            background-size: 30px 30px; /*no*/
+            vertical-align: top;
+          }
+        }
+      }
+      p {
+        margin: 0;
+      }
+    }
+    .content {
+      .title {
+        padding: 10px 0;
+        text-align: center;
+        border-bottom: 1px solid #EEEEEE; /*no*/
+      }
+      .list {
+        padding: 15px 15px;
+        .item {
+          width: 100%;
+          .item-detail {
+            display: flex;
+            justify-content: space-between;
+          }
+        }
+      }
+      .plant-list {
+        .item {
+          padding-left: 35px;
+          .photo {
+            display: flex;
+            width: 100%;
+           // align-items: center;
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}

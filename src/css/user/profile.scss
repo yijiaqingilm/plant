@@ -1,0 +1,73 @@
+@import "../globalFunc";
+
+.profile {
+  .user {
+    width: 100%;
+    display: flex;
+    padding: 40px;
+    .avatar {
+      flex: 0 0 110px;
+      width: 110px;
+      height: 110px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+      }
+    }
+    .content {
+      flex: 1 1 auto;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      > div {
+        flex: 1;
+        display: flex;
+        width: 100%;
+        align-items: center;
+      }
+      .amount {
+        color: $theme_color;
+      }
+    }
+    .two-code {
+      text-align: center;
+      img {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+      }
+    }
+  }
+  .menu {
+    .col-33 {
+      text-align: center;
+      @include setFontSize($middleFontSize);
+      &:nth-child(n) {
+        border-right: 1px solid #eaeaea; /*no*/
+        border-bottom: 1px solid #eaeaea; /*no*/
+      }
+      &:nth-child(3n+0) {
+        border-right: 0;
+      }
+      padding: 70px 0;
+      .icon {
+        width: 60px; /*no*/
+        height: 60px; /*no*/
+        margin: 0 auto;
+        $icon_type: "order2" "cart" "address" "ticket" "invoice" "score2" "exchange" "zhanghao";
+        @each $type in $icon_type {
+          &.icon_#{$type} {
+            background: url('../../assets/icon_#{$type}.png') no-repeat;
+            background-position: center;
+            background-size: 100%;
+          }
+        }
+      }
+    }
+    .text {
+      padding-top: 30px;
+    }
+  }
+}

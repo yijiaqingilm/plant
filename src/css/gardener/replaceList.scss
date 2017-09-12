@@ -1,0 +1,65 @@
+@import "../globalFunc";
+
+.replaceList {
+  .apply-replace {
+    text-align: center;
+    margin: 50px 0;
+  }
+
+  .list {
+    .item {
+      .header {
+        display: flex;
+        padding: 20px 40px;
+        border-bottom: 1px solid #aaaaaa;
+        justify-content: space-between;
+        align-items: center;
+        .time {
+          display: flex;
+          align-items: center;
+          .icon_time {
+            padding-right: 10px;
+          }
+        }
+        .status {
+          color: $theme_color;
+          @include setFontSize($middleFontSize);
+          &.err-info {
+            color: $warn_color;
+          }
+        }
+      }
+      .info {
+        $baseHeight: 140px;
+        display: flex;
+        width: 100%;
+        padding: 26px 36px;
+        .photo {
+          flex: 0 0 $baseHeight;
+          img {
+            width: $baseHeight;
+            height: $baseHeight;
+          }
+        }
+        .detail {
+          flex: 1;
+          height: $baseHeight;
+          line-height: $baseHeight/2;
+          padding-left: 24px;
+        }
+        .status {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: space-around;
+        }
+      }
+      .err {
+        margin-bottom: 26px;
+        padding: 0 40px;
+        color: $warn_color;
+        @include setFontSize($middleFontSize)
+      }
+    }
+  }
+}

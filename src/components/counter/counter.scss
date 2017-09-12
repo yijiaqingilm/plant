@@ -1,0 +1,60 @@
+@import "../../css/global.scss";
+
+.amount {
+  display: table;
+  border-radius: 8px;
+  border: 1px solid #aaaaaa; /*no*/
+  &.amount-max {
+    .counter-button {
+      width: 80px;
+      height: 50px;
+      line-height: 50px;
+    }
+    .adder-button {
+      width: 80px;
+      height: 50px;
+      line-height: 50px;
+    }
+    .minus-button {
+      width: 80px;
+      height: 50px;
+      line-height: 50px;
+    }
+  }
+  .counter-button {
+    display: table-cell;
+    @include setFontSize($middleFontSize);
+    text-align: center;
+    width: 55px;
+    height: 35px;
+    line-height: 35px;
+  }
+  .adder-button {
+    @extend .counter-button;
+  }
+  .minus-button {
+    @extend .counter-button;
+  }
+
+  .number-button {
+    position: relative;
+    @extend .counter-button;
+    border-right: 1px solid #aaaaaa; /*no*/
+    border-left: 1px solid #aaaaaa; /*no*/
+    color: $theme_color;
+    .number-input {
+      position: absolute;
+      border: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 98%;
+      text-align: center;
+      padding: 0;
+    }
+  }
+  .adder-button, .number-button, .minus-button {
+  }
+}
+
+

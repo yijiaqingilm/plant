@@ -1,0 +1,65 @@
+@import "../globalFunc";
+
+.invoice {
+  @include setFontSize($baseFontSize);
+  .total-money{
+    @include setFontSize($middleFontSize);
+  }
+  .submit {
+    margin: 150px auto;
+    text-align: center;
+  }
+  @at-root .invocie-list {
+    @include setFontSize($baseFontSize);
+  }
+  .form {
+    .invoice-type {
+      &.group {
+        padding-bottom: 0;
+        &.first-group {
+          &:after {
+            height: 0;
+          }
+
+        }
+        .form-input {
+          display: flex;
+          align-items: center;
+          .my-radio {
+            width: 40px;
+          }
+          label {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.invocieList {
+  .item {
+    position: relative;
+    width: 100%;
+    padding: 20px 35px;
+    &:after {
+      @include onepx
+    }
+    > div {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      min-height: 44px;
+    }
+    .item-time {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  .status {
+    color: $theme_color;
+    @include setFontSize($middleFontSize);
+  }
+}

@@ -1,0 +1,48 @@
+@import "../globalFunc";
+
+.center {
+  .wrap {
+    @include setFontSize($baseFontSize);
+    .menu {
+      justify-content: flex-start;
+      display: table;
+      width: 100%;
+      .col-33 {
+        float: left;
+        text-align: center;
+        /* &:nth-child(odd) {
+           border-right: 1px solid #aaaaaa; !*no*!
+           border-bottom: 1px solid #aaaaaa; !*no*!
+         }
+         &:nth-child(even) {
+           border-bottom: 1px solid #aaaaaa; !*no*!
+         }*/
+        &:nth-child(n) {
+          border-right: 1px solid #aaaaaa; /*no*/
+          border-bottom: 1px solid #aaaaaa; /*no*/
+        }
+        &:nth-child(3n) {
+          border-right: 0;
+        }
+
+        padding: 20px 0;
+        .icon {
+          width: 60px; /*no*/
+          height: 60px; /*no*/
+          margin: 0 auto;
+          $icon_type: "order" "exchange" "perf" "profile" "give" "time" "c_ticket" "crm" "make_order" "p_order" "proxy" "proxy_list";
+          @each $type in $icon_type {
+            &.icon_#{$type} {
+              background: url('../../assets/icon_#{$type}.png') no-repeat;
+              background-position: center;
+              background-size: 100%;
+            }
+          }
+        }
+      }
+      .text {
+        padding-top: 30px;
+      }
+    }
+  }
+}

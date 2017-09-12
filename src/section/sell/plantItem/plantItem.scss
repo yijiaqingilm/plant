@@ -1,0 +1,35 @@
+@import "../../../css/global.scss";
+
+.plant-item {
+  $baseSize: 330px;
+  display: inline-block;
+  width: 50%;
+  @include setFontSize($baseFontSize);
+  padding-bottom: 25px;
+  .plant-img {
+    position: relative;
+    width: $baseSize;
+    height: $baseSize;
+    margin: 0 auto;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
+
+    .plant-checked {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+  }
+  .plant-name, .plant-price, .plant-counter {
+    padding-top: 5px;
+    padding-left: 15px;
+    @include ellipsis;
+  }
+  .plant-counter {
+    display: flex;
+    width: 100%;
+  }
+}

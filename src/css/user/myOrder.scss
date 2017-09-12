@@ -1,0 +1,188 @@
+@import "../globalFunc";
+@import "../global_icon/global_icon";
+
+.myOrder {
+  @include setFontSize($baseFontSize);
+  .order {
+    position: absolute;
+    top: 70px;
+    bottom: 0;
+    width: 100%;
+    .no-order {
+      text-align: center;
+      .hint {
+        margin-top: 120px;
+        color: $theme_color;
+        p {
+          margin: 0;
+          padding-bottom: 10px;
+          @include setFontSize($middleFontSize);
+        }
+      }
+      .go {
+        display: flex;
+        margin-top: 120px;
+        div {
+          flex-grow: 1;
+        }
+      }
+    }
+    .order-list {
+      overflow-y: scroll;
+      height: 100%;
+      .group {
+        .title {
+          display: flex;
+          padding: 0 35px;
+          height: 60px;
+          line-height: 60px;
+          @include setFontSize($middleFontSize);
+          background-color: #eaeaea;
+          justify-content: space-between;
+          .more {
+            color: $theme_color;
+          }
+        }
+      }
+      .order-item {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 35px;
+        &:after {
+          @include onepx;
+        }
+        &:last-child:after {
+          // height: 0;
+        }
+        .order-info {
+          flex-grow: 5;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          > div {
+            padding-bottom: 10px;
+            &:after {
+              padding-bottom: 0;
+            }
+            &:last-child {
+              padding-bottom: 0;
+            }
+          }
+          .have {
+            color: $theme_color;
+          }
+        }
+        .order-status {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          justify-content: space-between;
+        }
+      }
+    }
+    .plant-order-list {
+      overflow-y: scroll;
+      height: 100%;
+      .item {
+        .item-header {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          padding: 20px 35px;
+          background-color: #EAEAEA;
+          @include setFontSize($middleFontSize);
+        }
+        .item-context {
+          .plant-list {
+            position: relative;
+            display: flex;
+            padding: 25px 35px;
+            background-color: #fafafa;
+            .plant-item {
+              $baseSize: 110px;
+              width: $baseSize;
+              height: $baseSize;
+              border-radius: 10px;
+              margin-right: 25px;
+              img {
+                width: 100%;
+                height: 100%;
+                border-radius: 10px;
+              }
+            }
+            .item-gt {
+              position: absolute;
+              top: 50%;
+              right: 35px;
+              transform: translateY(-50%);
+            }
+          }
+          .context-footer {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 35px;
+            height: 70px;
+            &:after {
+              @include onepx;
+            }
+            .total {
+              color: $warn_color;
+            }
+
+          }
+        }
+        .item-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 35px;
+          > div {
+            &:first-child {
+              color: #999;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.address-info {
+  padding: 20px 35px;
+  .company {
+    display: flex;
+    justify-content: space-between;
+  }
+  .content {
+    @include ellipsis;
+  }
+  .phone {
+    span {
+      color: $theme_color;
+    }
+    .phone-number {
+      position: relative;
+
+    }
+
+  }
+}
+
+.total {
+  color: $warn_color;
+}
+
+.order-msg {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 35px;
+  color: #c4201c;
+  background-color: #fff6d6;
+  @include setFontSize($maxFontSize);
+}

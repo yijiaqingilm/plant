@@ -1,0 +1,78 @@
+@import "../globalFunc";
+@import "../global_icon/global_icon";
+
+.addressList {
+  .address-add {
+    display: flex;
+    width: 100%;
+    height: 170px;
+    justify-content: center;
+    align-items: center;
+    color: $theme_color;
+    @include setFontSize($maxFontSize);
+  }
+  .address-list {
+    .address-item {
+      background-color: #EEEEEE;
+      padding-bottom: 10px;
+      &:last-child {
+        padding-bottom: 0;
+      }
+      .info {
+        background-color: #ffffff;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 35px 0 35px;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        > div {
+          display: inline-block;
+        }
+        .company {
+          width: 100%;
+          padding-top: 20px;
+        }
+        .name {
+          padding-top: 20px;
+        }
+      }
+      .detail {
+        background-color: #ffffff;
+        position: relative;
+        padding: 30px 35px;
+        &:after {
+          @include onepx;
+        }
+      }
+      .set {
+        width: 100%;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 35px;
+        color: #999999;
+        .set-default {
+          flex: 1 1 auto;
+        }
+        @mixin baseProps {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          text-align: right;
+        }
+        .edit {
+          @include baseProps;
+        }
+        .del {
+          @include baseProps;
+          margin-left: 40px;
+        }
+      }
+
+    }
+
+  }
+}

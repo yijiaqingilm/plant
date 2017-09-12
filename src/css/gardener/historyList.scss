@@ -1,0 +1,43 @@
+@import "../globalFunc";
+.historyList {
+  @at-root .history-list {
+    @include setFontSize($baseFontSize);
+  }
+  .history-list {
+    .history-item {
+      position: relative;
+      width: 100%;
+      padding: 35px;
+      &:after {
+        @include onepx
+      }
+      > div {
+        @include ellipsis;
+        padding-bottom: 20px;
+        &:last-child {
+          padding-bottom: 0;
+        }
+      }
+      .context {
+        display: flex;
+        width: 100%;
+        .left {
+          flex: 1;
+          @include ellipsis;
+        }
+        .right {
+          width: 25px; /*no*/
+          text-align: right;
+          .gt {
+            width: 8px; /*no*/
+            height: 8px; /*no*/
+            margin-right: 4px; /*no*/
+            border-top: 2px solid #eaeaea; /*no*/
+            border-right: 2px solid #eaeaea; /*no*/
+          }
+        }
+      }
+    }
+
+  }
+}

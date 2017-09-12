@@ -1,0 +1,64 @@
+@import "../../../css/global.scss";
+
+.list {
+  width: 100%;
+  .item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 30px 35px;
+    &:after {
+      @include onepx;
+    }
+    .photo {
+      flex: 0 0 180px;
+      width: 180px;
+      height: 180px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+      }
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1 1 auto;
+      padding-left: 25px;
+      .context {
+        flex-grow: 2;
+        color: #666666;
+        >div{
+          @include setFontSize($miniFontSize);
+        }
+        .brief {
+          @include clamp;
+        }
+      }
+      .name {
+        flex-grow: 1;
+        @include setFontSize($baseFontSize);
+      }
+      .detail {
+        flex-grow: 2;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        @include setFontSize($miniFontSize);
+        .show-detail {
+          display: flex;
+          align-items: flex-end;
+          color: #FFFFFF;
+          background: $theme_color;
+          padding: 2px 5px; /*no*/
+          border-radius: 5px;
+        }
+        .color-warn{
+          @include setFontSize($baseFontSize);
+        }
+      }
+    }
+  }
+}

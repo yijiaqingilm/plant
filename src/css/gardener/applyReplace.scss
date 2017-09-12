@@ -1,0 +1,96 @@
+@import "../globalFunc";
+
+.applyReplace {
+  $baseHeight: 110px;
+  @at-root .history {
+    @include setFontSize($miniFontSize);
+  }
+  p {
+    margin: .5em 0;
+  }
+  @include setFontSize($baseFontSize);
+  text-align: center;
+  .header {
+    text-align: left;
+    padding: 25px 20px;
+    color: $warn_color;
+    p{
+      &:last-child{
+        margin: 0;
+      }
+    }
+  }
+  .content {
+    .top {
+      padding: 0 0 80px 0;
+      position: relative;
+      .two-code {
+        padding-top: 100px;
+      }
+      .scan-msg {
+        padding-top: 50px;
+      }
+      .plant {
+        display: flex;
+        justify-content: center;
+        width: 516px;
+        height: 334px;
+        text-align: left;
+        margin: 60px auto;
+        .wrap {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .plant-photo {
+            flex: 0 0 $baseHeight;
+            img {
+              width: $baseHeight;
+              height: $baseHeight;
+            }
+          }
+          .plant-info {
+            padding-left: 30px;
+            line-height: $baseHeight/2;
+
+          }
+        }
+
+      }
+      .success-msg {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: $theme_color;
+        @include setFontSize($middleFontSize)
+      }
+    }
+    .photo {
+      margin: 0 auto;
+      width: 516px;
+      height: 334px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .photo_detail {
+        width: 110px;
+        height: 110px;
+      }
+      img {
+        height: 100%;
+      }
+    }
+    .photo-msg {
+      padding-top: 34px;
+    }
+    .apply {
+      margin: 150px auto;
+    }
+  }
+  .mycanvas{
+    /*display: none;*/
+  }
+}

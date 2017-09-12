@@ -1,0 +1,13 @@
+@import "../globalFunc";
+.invoiceSuccess {
+  .invoice_context {
+    @include setFontSize($middleFontSize);
+    .time {
+      color: $theme_color;
+      @include setFontSize($maxFontSize);
+    }
+  }
+  .close {
+    margin-top: 60px;
+  }
+}

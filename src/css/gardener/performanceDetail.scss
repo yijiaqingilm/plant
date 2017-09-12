@@ -1,0 +1,41 @@
+@import "../globalFunc";
+.performanceDetail {
+  .performance-detail-table {
+    .total {
+      color: $theme_color;
+    }
+    @mixin tr_prop {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      .td {
+        flex: 0 0 33.33%;
+        text-align: center;
+      }
+    }
+    .table-thead {
+      @include tr_prop;
+      @include setFontSize($middleFontSize);
+      background-color: #eaeaea;
+      .flex {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .icon_time {
+          padding-right: 5px;
+        }
+      }
+    }
+    .table-body {
+      .tr {
+        @include tr_prop;
+        &:first-child:after {
+          @include onepx;
+        }
+      }
+    }
+  }
+}

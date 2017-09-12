@@ -1,0 +1,35 @@
+@import "../globalFunc";
+.user-group {
+  display: flex;
+  .group {
+    width: 80%;
+  }
+  > div {
+    &:last-child {
+      width: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.gt {
+  margin-left: 10px;
+  width: 10px;
+  height: 10px;
+  border-top: 3px solid $theme_color;
+  border-right: 3px solid $theme_color;
+}
+
+.between {
+  justify-content: space-between;
+  > div {
+    &:last-child {
+      display: flex;
+      align-items: center;
+      overflow: inherit;
+      flex: inherit;
+    }
+  }
+}

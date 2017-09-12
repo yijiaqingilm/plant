@@ -1,0 +1,25 @@
+@import "../globalFunc";
+.advice {
+  .list {
+    @include setFontSize($baseFontSize);
+    .item {
+      position: relative;
+      padding: 35px;
+      &:after {
+        @include onepx;
+      }
+      > div {
+        padding-bottom: 10px;
+
+      }
+      .time {
+        color: #999999;
+      }
+      .reply {
+        span {
+          color: $theme_color;
+        }
+      }
+    }
+  }
+}

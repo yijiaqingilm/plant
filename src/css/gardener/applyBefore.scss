@@ -1,0 +1,12 @@
+@import "../globalFunc";
+.applyBefore {
+  .content {
+    margin-top: 86px;
+    text-align: center;
+    color: $theme_color;
+    @include setFontSize($maxFontSize);
+    .my-button {
+      margin-top: 130px;
+    }
+  }
+}

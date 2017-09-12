@@ -1,0 +1,97 @@
+@import "../globalFunc";
+@import "../global_icon/global_icon";
+
+.orderList {
+  margin-bottom: 50px; /*no*/
+  @include setFontSize($baseFontSize);
+  @at-root .history-list {
+    @include setFontSize($baseFontSize);
+  }
+  .list {
+    width: 100%;
+    @include setFontSize($baseFontSize);
+    .item {
+      position: relative;
+      padding: 25px;
+      &:after {
+        @include onepx;
+      }
+      .gt {
+        width: 20px;
+        height: 20px;
+        border-top: 2px solid $theme_color; /*no*/
+        border-right: 2px solid $theme_color; /*no*/
+        position: absolute;
+        right: 35px;
+        top: 50%;
+        margin-top: -10px;
+      }
+      .main {
+        margin-right: 30px;
+        margin-bottom: 40px;
+        > div {
+          padding-bottom: 10px;
+        }
+        .company {
+          display: flex;
+          justify-content: space-between;
+        }
+        .content {
+          /*word-break: break-all;*/
+          @include ellipsis;
+        }
+        .phone {
+          span {
+            color: $theme_color;
+          }
+          .phone-number {
+            position: relative;
+
+          }
+
+        }
+      }
+      .footer {
+        width: 100%;
+        display: table;
+        > div {
+          width: 50%;
+          float: left;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .get-more {
+    margin: 100px auto;
+    text-align: center;
+  }
+  @at-root .order-modal {
+    position: absolute;
+    width: 250px; /*no*/
+    top: 30%;
+    left: 50%;
+    background-color: #fff;
+    border-radius: 21px;/*no*/
+    z-index: 1001;
+    transform: translate(-50%, 0);
+    text-align: center;
+    > div {
+      margin: 20px 0; /*no*/
+    }
+
+    .amount {
+      margin: 0 15px; /*no*/
+    }
+
+    .modal-footer {
+      display: table;
+      width: 100%;
+      > div {
+        width: 50%;
+        float: left;
+      }
+    }
+  }
+}
+

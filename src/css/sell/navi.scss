@@ -1,0 +1,15 @@
+@import "../globalFunc";
+
+.myFrame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border: 0;
+}
+
+.content-block-inner {
+  height: 100%;
+}

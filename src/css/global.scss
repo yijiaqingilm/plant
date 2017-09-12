@@ -1,0 +1,838 @@
+@import "globalFunc.scss";
+@import "resetFramework7.scss";
+
+body, p {
+  @include setFontSize($baseFontSize);
+}
+
+div {
+  box-sizing: border-box;
+  @include setFontSize($baseFontSize);
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+.gt {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-top: 5px solid #eaeaea;
+  border-right: 5px solid #eaeaea;
+  transform: rotate(45deg);
+}
+
+.my-button {
+  @include setFontSize($middleFontSize);
+  @include baseButton;
+  padding: 5px 30px; /*no*/
+  letter-spacing: 1px; /*no*/
+}
+
+.apply-button {
+  @include setFontSize($baseFontSize);
+  @include baseButton;
+  padding: 5px 5px; /*no*/
+}
+
+.middle-button {
+  @include setFontSize($middleFontSize);
+  @include baseButton;
+  padding: 5px 10px; /*no*/
+}
+
+.min-button {
+  @include setFontSize($baseFontSize);
+  @include baseButton;
+  padding: 2px 10px; /*no*/
+  &.bg-gray {
+    color: black;
+    background-color: #eaeaea;
+  }
+}
+
+.order-button {
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  @include setFontSize($baseFontSize);
+  text-align: center;
+  color: #ffffff;
+  background-color: $theme_color;
+  border-radius: 5px;
+  letter-spacing: 1px; /*no*/
+
+  &.bg-gray {
+    background-color: #999999;
+  }
+}
+
+.order-list-button {
+  @include setFontSize($baseFontSize);
+  @include baseButton;
+  padding: 0 10px; /*no*/
+  height: 45px;
+  line-height: 45px;
+}
+
+.btn-link {
+  display: inline-block;
+  @include setFontSize($baseFontSize);
+  text-align: center;
+  color: #999;
+  border: 1px solid #999; /*no*/
+  padding: 2px 5px; /*no*/
+  border-radius: 5px;
+  letter-spacing: 1px; /*no*/
+  &.active {
+    color: $theme_color;
+    border: 1px solid $theme_color; /*no*/
+  }
+}
+
+/* 1px 虚线*/
+.one-px-dotted {
+  border: 1px dashed #aaaaaa; /*no*/
+}
+
+.line-10 {
+  height: 10px;
+  background: #EEEEEE;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.color-theme {
+  color: $theme_color;
+}
+
+.color-black {
+  color: #000;
+}
+
+.color-gray {
+  color: #666666;
+}
+
+.color-light-gray {
+  color: #999;
+}
+
+.color-warn {
+  color: $warn_color;
+}
+
+.bg-lucency {
+  background: rgba(0, 0, 0, 0);
+}
+
+.lease {
+  color: #d9b524;
+}
+
+.buy {
+  color: $warn_color;
+}
+
+.down {
+  display: inline-block;
+  width: 6px; /*no*/
+  height: 6px; /*no*/
+  border-right: 2px solid $gray_color; /*no*/
+  border-bottom: 2px solid $gray_color; /*no*/
+  transform: rotate(45deg);
+  margin-left: 10px;
+  margin-bottom: 2px; /*no*/
+}
+
+.up {
+  display: inline-block;
+  width: 6px; /*no*/
+  height: 6px; /*no*/
+  border-right: 2px solid $gray_color; /*no*/
+  border-bottom: 2px solid $gray_color; /*no*/
+  transform: rotate(-135deg);
+  margin-left: 10px;
+}
+
+.triangle-down {
+}
+
+.time-input {
+  width: 200px;
+  height: 24px; /*no*/
+  text-align: center;
+  background-color: #eaeaea;
+  color: #666666;
+  border: 0;
+  border-radius: 5px;
+  @include setFontSize($baseFontSize);
+
+}
+
+.line {
+  width: 40px;
+  height: 6px;
+  background-color: #eaeaea;
+}
+
+.line-through {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.min-line-through {
+  @include setFontSize($miniFontSize);
+  color: #999;
+  text-decoration: line-through;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.margin-center {
+  margin: 0 auto;
+}
+
+.mini-text {
+  color: #666666;
+  @include setFontSize($miniFontSize);
+}
+
+.default-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 35px;
+  &:after {
+    @include onepx;
+  }
+  &.no-border {
+    &:after {
+      height: 0;
+    }
+  }
+}
+
+.total {
+  color: #666666;
+  @include setFontSize($baseFontSize);
+}
+
+.line-50 {
+  height: 50px; /*no*/
+}
+
+.footer-line-center {
+  line-height: 50px; /*no*/
+}
+
+/*公用form 表单结构*/
+.form {
+  @include setFontSize($baseFontSize);
+  padding: 0 30px 15px 30px;
+  .group {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px 0 14px 0;
+    &.first-group {
+      padding-top: 0;
+    }
+    &:after {
+      @include onepx;
+    }
+    &.no-border {
+      &:after {
+        height: 0;
+      }
+    }
+    .form-label {
+      display: flex;
+      align-items: center;
+    }
+    .form-input {
+      flex: 1;
+      @include ellipsis;
+      input {
+        box-sizing: border-box;
+        border: none;
+        background: none;
+        border-radius: 0 0 0 0;
+        box-shadow: none;
+        display: block;
+        padding: 0px;
+        margin: 0;
+        width: 90%;
+        height: 43px;
+        color: #000;
+        padding-left: 5px;
+        float: left;
+        @include setFontSize($baseFontSize);
+        @include ellipsis;
+      }
+    }
+    .hint {
+      flex-basis: 100%;
+      margin-left: 200px;
+      margin-top: 20px;
+      @include setFontSize($miniFontSize);
+      color: #999999;
+    }
+  }
+}
+
+.tabs {
+  position: absolute;
+  top: 0; /*no*/
+  left: 0;
+  z-index: 99;
+  width: 100%;
+  height: 70px;
+  line-height: 70px;
+  display: flex;
+  text-align: center;
+  background-color: #FFFFFF;
+  @include setFontSize($baseFontSize);
+  &:after {
+    @include onepx;
+  }
+  &.no-hairlines:after {
+    height: 0;
+  }
+  .tab {
+    display: block;
+    flex-grow: 1;
+    &.active {
+      position: relative;
+      color: $theme_color;
+      &:after {
+        @include onepx;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 6px;
+        width: 70%;
+        background-color: $theme_color;
+        display: block;
+        z-index: 16;
+      }
+    }
+  }
+}
+
+//公共列表组件 结构(左边固定右自适应)
+.my-list {
+  position: relative;
+  &:after {
+    @include onepx;
+  }
+  .my-item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 30px 25px;
+    &:after {
+      @include onepx;
+    }
+    .left {
+      flex: 0 0 110px;
+      .icon-item-left {
+        width: 110px;
+        height: 110px;
+      }
+    }
+    .right {
+      position: relative;
+      flex: 1;
+      margin-left: 25px;
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      justify-content: center;
+      > div {
+        flex: 1;
+        display: flex;
+        width: 100%;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.my-title {
+  position: relative;
+  background: #EEEEEE;
+  padding: 20px 35px;
+  &:after {
+    @include onepx;
+    background-color: #ffffff;
+  }
+}
+
+.my-title-used {
+  padding: 10px 35px;
+}
+
+// 选地址组件
+.address {
+  position: relative;
+  .gt {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    margin-top: -20px;
+    border-top: 5px solid #eaeaea;
+    border-right: 5px solid #eaeaea;
+  }
+  .address-group {
+    width: 80%;
+
+  }
+}
+
+// 悬浮小组件
+.floating {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100px; /*no*/
+  height: 100px; /*no*/
+}
+
+/*mypickermodal 样式 */
+.my-picker-modal {
+  @include setFontSize($baseFontSize);
+  .my-modal {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 12500;
+    width: 100%;
+    height: auto;
+    background: #ffffff;
+  }
+}
+
+.picker-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  background: #e3e3e3;
+  text-align: center;
+  @include setFontSize($middleFontSize);
+  .close-modal {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.picker-content {
+  .title {
+    background-color: #eaeaea;
+    padding: 15px 35px;
+  }
+  .group {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 25px 35px;
+    justify-content: space-between;
+    align-items: center;
+    .item {
+      flex: 0 0 33.33%;
+      width: 33.33%;
+    }
+  }
+  .custom {
+    padding: 15px 35px;
+    .counter {
+      display: flex;
+      align-items: center;
+      padding-top: 15px;
+      padding-left: 25px; /*no*/
+    }
+  }
+  .week-list {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px 35px;
+    flex-wrap: wrap;
+    &:after {
+      @include onepx;
+    }
+    > span {
+      margin-bottom: 20px;
+      margin-right: 0;
+    }
+  }
+  .time-zones {
+    display: flex;
+    width: 100%;
+    padding: 20px 35px;
+    .zones-title {
+      flex: 0 0 80px; /*no*/
+      width: 80px; /*no*/
+    }
+    .zones-context {
+      flex: 1;
+      .zones-group {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 20px;
+      }
+    }
+  }
+}
+
+.my-modal-transition-enter {
+  left: 0;
+  bottom: 0;
+  display: none;
+}
+
+.pay_fixed {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.no-result {
+  color: $theme_color;
+  @include setFontSize($baseFontSize);
+  margin: 20px auto;
+}
+
+.icon_more {
+  width: 30px;
+  height: 30px;
+}
+
+.icon_address {
+  width: 50px;
+  height: 50px;
+}
+
+.long-string {
+  display: inline-block;
+  width: 6px;
+  height: 60px;
+  background-color: $theme_color;
+}
+
+.cart-count {
+  position: absolute;
+  top: -2px; /*no*/
+  left: 47%;
+  width: 18px; /*no*/
+  height: 18px; /*no*/
+  line-height: 18px; /*no*/
+  border-radius: 100%;
+  transform: translate(-50%, 10%);
+  background-color: #EC6976;
+  text-align: center;
+  @include setFontSize($miniFontSize);
+
+}
+
+.icon_success {
+  width: 44px;
+  height: 44px;
+  margin: 20px auto;
+}
+
+.arrows {
+  width: 110px;
+  margin: 10px auto; /*no*/
+}
+
+.image-file {
+  position: relative;
+  width: 176px;
+  height: 114px;
+  margin: 35px;
+  float: left;
+  > img {
+    width: 176px;
+    height: 114px;
+  }
+}
+
+div {
+  &.clearBoth {
+    zoom: 1;
+    &:after {
+      display: block;
+      height: 0;
+      content: ' ';
+      clear: both;
+    }
+  }
+}
+
+.content {
+  width: 100%;
+  textarea {
+    margin-top: 10px;
+    width: 99%;
+    height: 140px;
+    resize: none;
+    background: none;
+    border: 1px solid #aaaaaa; /*no*/
+    @include setFontSize($miniFontSize);
+    outline: none;
+    &::-webkit-input-placeholder {
+      color: #999;
+    }
+  }
+}
+
+textarea {
+  width: 99%;
+  height: 140px;
+  resize: none;
+  background: none;
+  border: 1px solid #aaaaaa; /*no*/
+  @include setFontSize($miniFontSize);
+  outline: none;
+  &::-webkit-input-placeholder {
+    color: #999;
+  }
+}
+
+.default-pd {
+  padding: 0 35px;
+}
+
+.order-info-group {
+  position: relative;
+  width: 100%;
+  display: flex;
+  padding: 10px 35px;
+  justify-content: space-between;
+  align-items: baseline;
+  &.min-height {
+    padding: 20px 35px;
+  }
+  &.onepx:after {
+    @include onepx;
+  }
+  .group-right {
+    display: flex;
+    align-items: center;
+    .gt {
+      margin-left: 10px;
+      width: 10px;
+      height: 10px;
+      border-top: 3px solid $theme_color;
+      border-right: 3px solid $theme_color;
+    }
+  }
+}
+
+.o-footer {
+  width: 100%;
+  height: 50px; /*no*/
+  line-height: 50px; /*no*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  text-align: center;
+  color: #999;
+  background: #eaeaea;
+  @include setFontSize($middleFontSize);
+  > div {
+    width: 50%;
+    height: 100%;
+    &.active {
+      color: #fff;
+      background: $theme_color;
+    }
+  }
+}
+
+.goods-list {
+  width: 100%;
+  .goods-item {
+    position: relative;
+    width: 100%;
+    display: flex;
+    padding: 20px 35px 20px 0;
+    &:after {
+      @include onepx;
+    }
+    .check {
+      position: relative;
+      display: flex;
+      flex: 0 0 100px;
+      width: 100px;
+      align-items: center;
+      justify-content: center;
+      .check-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .photo {
+      flex: 0 0 170px;
+      width: 170px;
+      height: 180px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .info {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      padding-left: 30px;
+      .context {
+        @include setFontSize($miniFontSize);
+        @include clamp;
+        color: $gray_color;
+      }
+      .detail {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        @include setFontSize($middleFontSize);
+        .price {
+          color: $warn_color;
+        }
+      }
+    }
+  }
+}
+
+.c-footer {
+  @include setFontSize($middleFontSize);
+  width: 100%;
+  height: 100%;
+  line-height: 44px; /*no*/
+  text-align: center;
+}
+
+.status {
+  @include setFontSize($middleFontSize);
+  color: $theme_color;
+  padding-bottom: 20px;
+
+  &.warn {
+    color: $warn_color;
+  }
+}
+
+.remake-list {
+  color: #666;
+  @include setFontSize($baseFontSize);
+  .remake {
+    .context {
+      @include setFontSize($baseFontSize);
+    }
+    .header {
+      display: table;
+      width: 100%;
+      .time {
+        @include setFontSize($miniFontSize);
+        color: #999;
+      }
+      > div {
+        width: 50%;
+        float: left;
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+}
+
+input, button, select, textarea {
+  outline: none;
+
+}
+
+textarea {
+  resize: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.backTop {
+  position: absolute;
+  right: 30px;
+  bottom: 100px;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50px; /*no*/
+  height: 50px; /*no*/
+  border-radius: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  border: 1px solid #aaaaaa; /*no*/
+  color: #999999;
+  .gt-top {
+    width: 15px;
+    height: 15px;
+    border-top: 2px solid #999999;
+    border-right: 2px solid #999999;
+    margin: 0 auto;
+    transform: rotate(-45deg);
+  }
+}
+
+#wrapper {
+  position: absolute;
+  top: 44px; /*no*/
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+
+
+
+
+

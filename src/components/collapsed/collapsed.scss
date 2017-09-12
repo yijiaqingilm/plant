@@ -1,0 +1,9 @@
+@import "../../css/global.scss";
+.collapsed {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  color: $gray_color;
+  align-items: center;
+}
+

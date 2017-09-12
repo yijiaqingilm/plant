@@ -1,0 +1,181 @@
+@import "../globalFunc";
+/* 公共养护列表*/
+.plant-list {
+  .item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 30px 25px;
+    &:after {
+      @include onepx;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+    }
+    .photo {
+      flex: 0 0 100px;
+      padding-left: 35px;
+      &.no-padding{
+        padding-left: 0;
+      }
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .info {
+      flex: 1;
+      padding-left: 25px;
+      .name {
+        display: flex;
+        width: 100%;
+        >span{
+          &:first-child{
+            max-width: 60%;
+            margin-right: 20px;/*no*/
+            @include ellipsis;
+          }
+        }
+      }
+      .notes {
+        color: $theme_color;
+      }
+      .detail {
+        display: flex;
+        width: 100%;
+        align-items: baseline;
+        > div {
+          &:first-child {
+
+          }
+          &:last-child{
+            flex: 1;
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+.icon_map {
+  width: 30px; /*no*/
+  height: 30px; /*no*/
+  background: url("../../assets/icon_address2.png") no-repeat;
+  background-size: 100%;
+  background-position: center;
+}
+
+/*公共养护 header*/
+.plant-header {
+  width: 100%;
+  padding: 50px 35px;
+  margin: 0 auto;
+  text-align: center;
+  > div:first-child {
+    @include setFontSize($middleFontSize);
+    color: $theme_color;
+  }
+  > div:last-child {
+    padding-top: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .address {
+      @include ellipsis;
+    }
+    .location {
+      color: $theme_color;
+      padding-left: 20px;
+    }
+    p {
+      padding-bottom: 15px;
+    }
+    .phone {
+      position: relative;
+      span.icon_phone {
+        position: absolute;
+        top: -15px; /*no*/
+        right: -35px; /*no*/
+        display: inline-block;
+        width: 30px; /*no*/
+        height: 30px; /*no*/
+        background: url("../../assets/icon_phone.png") no-repeat;
+        background-size: 30px 30px; /*no*/
+      }
+    }
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.plant-header2 {
+  @extend .plant-header;
+  position: absolute;
+  top: 44px; /*no*/
+  background: #ffffff;
+  z-index: 1001;
+}
+
+/*公共扫一扫*/
+.scan {
+  background: url("../../assets/icon_scan.png") no-repeat;
+  background-size: 110px 110px;
+  background-position: center;
+  width: 100%;
+  height: 110px;
+}
+
+/* icon ——time*/
+.icon_time {
+  display: inline-block;
+  vertical-align: middle;
+  width: 34px;
+  height: 34px;
+  background: url("../../assets/icon_calendar.png") no-repeat;
+  background-size: 34px 34px;
+}
+
+.icon_adddress2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  background: url("../../assets/icon_address2.png") no-repeat;
+  background-size: 50px 50px;
+  margin-right: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+@import "../globalFunc";
+
+.geoList {
+  width: 100%;
+  @include setFontSize($baseFontSize);
+  .geo-list {
+    .geo-item {
+      padding: 30px 35px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      .geo-photo {
+        flex: 0 0 170px;
+        height: 230px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .geo-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-left: 25px;
+        .price {
+          @include setFontSize($middleFontSize);
+          color: $warn_color;
+        }
+      }
+      .detail {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+        color: #666666;
+        @include setFontSize($miniFontSize);
+        .show-detail {
+          @include setFontSize($baseFontSize);
+          color: $theme_color;
+        }
+      }
+    }
+  }
+}
+

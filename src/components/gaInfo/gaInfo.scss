@@ -1,0 +1,25 @@
+@import "../../css/global.scss";
+
+.gaInfo {
+  padding: 50px 50px;
+  display: flex;
+  width: 100%;
+  .avatar {
+    flex: 0 0 110px;
+    img {
+      width: 110px;
+      height: 110px;
+      border-radius: 100%;
+    }
+  }
+  .content {
+    $height: 110px;
+    flex: 1;
+    height: $height;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 20px;
+    @include setFontSize(12px);
+  }
+}

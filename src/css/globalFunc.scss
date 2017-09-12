@@ -1,0 +1,74 @@
+@mixin setFontSize($fontSize) {
+
+  @media screen and (max-width: 320px) {
+    font-size: $fontSize - 1;; /*no*/
+  }
+  @media screen and (min-width: 321px) and (max-width: 375px) {
+    font-size: $fontSize; /*no*/
+  }
+  @media screen and (min-width: 376px) {
+    font-size: $fontSize + 1; /*no*/
+  }
+}
+
+@mixin onepx {
+  content: ' ';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: auto;
+  top: auto;
+  height: 1px; /*no*/
+  width: 100%;
+  background-color: #eaeaea;
+  display: block;
+  z-index: 15;
+  transform-origin: 50% 100%;
+}
+
+@mixin baseButton {
+  background-color: $theme_color;
+  text-align: center;
+  color: #FFFFFF;
+  display: inline-block;
+  border-radius: 8px;
+  letter-spacing: 1px; /*no*/
+  &.bg-gray {
+    background-color: #999999;
+  }
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin clamp($line:2) {
+  overflow: hidden;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+@mixin top_right_icon {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 50%;
+  right: 10px; /*no*/
+  transform: translateY(-50%);
+}
+
+$theme_color: #40B96A;
+$warn_color: #c4201c;
+$gray_color: #666666;
+$miniFontSize: 12px;
+$baseFontSize: 15px;/* 默认字体*/
+$middleFontSize: 16px;
+$maxFontSize: 18px;
+$superMaxFontSize:24px;
+
+
+
+
+

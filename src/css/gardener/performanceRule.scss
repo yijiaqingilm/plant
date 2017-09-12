@@ -1,0 +1,27 @@
+@import "../globalFunc";
+.performanceRule {
+  .context {
+    padding: 35px;
+  }
+  .performance-rule-table {
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #c8c7cc; /*no*/
+    .tr {
+      display: flex;
+      width: 100%;
+      height: 75px;
+      line-height: 75px;
+      .td {
+        flex: 0 0 50%;
+        text-align: center;
+        border-right: 1px solid #c8c7cc; /*no*/
+        border-bottom: 1px solid #c8c7cc; /*no*/
+        &:nth-child(even) {
+          border-right: 0;
+        }
+      }
+    }
+
+  }
+}
