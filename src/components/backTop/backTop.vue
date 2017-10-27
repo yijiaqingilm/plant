@@ -3,24 +3,21 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        props: {
-            text: {
-                type: String,
-                default: 'TOP'
-            }
-        },
-        data(){
-            return {}
-        },
-        methods: {},
-        mounted(){
+  export default {
+    props: {
+      text: {
+        type: String,
+        default: 'TOP'
+      }
+    },
+    data () {
+      return {}
+    },
+    methods: {},
+    components: {},
+    computed: {}
 
-        },
-        components: {},
-        computed: {}
-
-    }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "backTop.scss";

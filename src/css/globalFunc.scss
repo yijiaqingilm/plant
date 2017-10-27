@@ -1,14 +1,15 @@
 @mixin setFontSize($fontSize) {
 
-  @media screen and (max-width: 320px) {
-    font-size: $fontSize - 1;; /*no*/
+  /*@media screen and (max-width: 320px) {
+    font-size: $fontSize - 1;; !*no*!
   }
   @media screen and (min-width: 321px) and (max-width: 375px) {
-    font-size: $fontSize; /*no*/
+    font-size: $fontSize; !*no*!
   }
   @media screen and (min-width: 376px) {
-    font-size: $fontSize + 1; /*no*/
-  }
+    font-size: $fontSize + 1; !*no*!
+  }*/
+  font-size: $fontSize; /*no*/
 }
 
 @mixin onepx {
@@ -50,6 +51,7 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
 }
+
 @mixin top_right_icon {
   width: 70px;
   height: 70px;
@@ -59,14 +61,18 @@
   transform: translateY(-50%);
 }
 
+@mixin bg-url($url) {
+  background: url($url) no-repeat;
+}
+
 $theme_color: #40B96A;
 $warn_color: #c4201c;
 $gray_color: #666666;
 $miniFontSize: 12px;
-$baseFontSize: 15px;/* 默认字体*/
+$baseFontSize: 15px; /* 默认字体*/
 $middleFontSize: 16px;
 $maxFontSize: 18px;
-$superMaxFontSize:24px;
+$superMaxFontSize: 24px;
 
 
 

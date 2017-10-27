@@ -31,27 +31,26 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {gardenerApi} from 'api'
-    export default {
-        data(){
-            return {}
-        },
-        created(){
-            console.log(this.$route);
-            /*let id = this.$route.query.params.id;
-             gardenerApi.accomplishMaintenanceDetail(this.$store.state.sessionkey, id).then(result => {
+  import { gardenerApi } from 'api'
 
-             });*/
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        }
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      console.log(this.$route)
+      /* let id = this.$route.query.params.id;
+       gardenerApi.accomplishMaintenanceDetail(this.$store.state.sessionkey, id).then(result => {
+
+       });*/
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
     @import "../../css/gardener/performanceDetail.scss";
-
 </style>

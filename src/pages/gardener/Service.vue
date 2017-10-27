@@ -40,45 +40,44 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    export default {
-        data(){
-            return {
-                serverInfo: {},
-                suggestion: '',
-                mobile: '',
+  import { userApi } from 'api'
 
-            }
-        },
-        created(){
-            userApi.getServer(this.$store.state.sessionkey).then(result => {
-                this.serverInfo = result.data;
-            });
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
+  export default {
+    data () {
+      return {
+        serverInfo: {},
+        suggestion: '',
+        mobile: '',
 
-        },
-        methods: {
-            submit(){
-                if (this.suggestion.length <= 0) {
-                    this.$f7.alert('请填写您的建议', '');
-                    return;
-                }
-                userApi.advice(this.suggestion, this.mobile).then(result => {
-                    console.log(result)
-                    this.$f7.alert(result.result, '', () => {
-                        this.$router.load({url: '/gardener/advice'});
-                    });
-                });
-            }
+      }
+    },
+    created () {
+      userApi.getServer(this.$store.state.sessionkey).then((result) => {
+        this.serverInfo = result.data
+      })
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+
+    },
+    methods: {
+      submit () {
+        if (this.suggestion.length <= 0) {
+          this.$f7.alert('请填写您的建议', '')
+          return
         }
+        userApi.advice(this.suggestion, this.mobile).then((result) => {
+          this.$f7.alert(result.result, '', () => {
+            this.$router.load({url: '/gardener/advice'})
+          })
+        })
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
     @import "../../css/gardener/service.scss";
 </style>
 

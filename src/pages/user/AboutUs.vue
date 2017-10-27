@@ -55,7 +55,7 @@
                     </div>
                 </f7-accordion-content>
             </f7-list-item>
-            <f7-list-item accordion-item  class="" title="支付宝支付">
+            <f7-list-item accordion-item class="" title="支付宝支付">
                 <f7-accordion-content>
                     <div class='context'>
                         <div class="left">
@@ -78,29 +78,29 @@
 
 <script type="text/ecmascript-6">
 
-    export default {
-        data(){
-            return {
-                showWxPay: true
-            }
-        },
-        created: function () {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        mounted(){
-            this.$nextTick(() => {
-                let wx_dom = document.querySelector('.wx-item');
-                this.$f7.accordionOpen(wx_dom);
-            });
-        },
-        methods: {}, components: {}
-    }
+  export default {
+    data () {
+      return {
+        showWxPay: true
+      }
+    },
+    created: function () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    mounted () {
+      this.$nextTick(() => {
+        let wx_dom = document.querySelector('.wx-item')
+        this.$f7.accordionOpen(wx_dom)
+      })
+    },
+    methods: {}, components: {}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/aboutUs.scss";
 </style>

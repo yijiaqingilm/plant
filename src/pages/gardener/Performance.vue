@@ -38,97 +38,95 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {gardenerApi} from 'api'
-    import GaInfo from 'components/gaInfo/gaInfo.vue'
-    import {getTimer} from 'lib/utils'
+  import { gardenerApi } from 'api'
+  import GaInfo from 'components/gaInfo/gaInfo.vue'
+  import { getTimer } from 'lib/utils'
 
-    export default {
-        data() {
-            return {
-                items: [],
-                date: {
-                    year: 2017,
-                    month: 1
-                },
-                totalTime: 0,
-                totalOrderCount: 0
-            }
+  export default {
+    data () {
+      return {
+        items: [],
+        date: {
+          year: 2017,
+          month: 1
         },
-        created() {
-            let fullYear = new Date().getFullYear();
-            let month = new Date().getMonth() + 1;
-            this.date.year = fullYear;
-            this.date.month = month;
-            this.loadData();
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
+        totalTime: 0,
+        totalOrderCount: 0
+      }
+    },
+    created () {
+      let fullYear = new Date().getFullYear()
+      let month = new Date().getMonth() + 1
+      this.date.year = fullYear
+      this.date.month = month
+      this.loadData()
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
 
-        },
-        mounted() {
-            this.$nextTick(() => {
-                var that = this;
-                let year = [];
-                let month = [];
-                let fullYear = new Date().getFullYear();
-                for (let y = fullYear - 10; y <= fullYear; y++) {
-                    year.push(y);
-                }
-                for (let m = 1; m <= 12; m++) {
-                    month.push(m);
-                }
-                var pickerDevice = this.$f7.picker({
-                    input: '#date-ctrl',
-                    value: [that.date.year, that.date.month],
-                    cols: [
-                        {
-                            textAlign: 'center',
-                            width: '200px',
-                            values: year
-                        },
-                        {
-                            textAlign: 'center',
-                            width: '200px',
-                            values: month
-                        }
-                    ],
-                    toolbarCloseText: '确定',
-                    scrollToInput: false,
-                    /*onChange(p, values, displayValues){
-                     console.log('p', p, 'values', values, 'display', displayValues);
-                     },*/
-                    onClose({value}) {
-                        that.date.year = value[0];
-                        that.date.month = value[1];
-                        that.page = 1;
-                        that.loadData();
-
-                    },
-                });
-            })
-        },
-        methods: {
-            getTimer: function (time) {
-                return getTimer(time);
+    },
+    mounted () {
+      this.$nextTick(() => {
+        var that = this
+        let year = []
+        let month = []
+        let fullYear = new Date().getFullYear()
+        let minYear = 10
+        for (let y = fullYear - minYear; y <= fullYear; y++) {
+          year.push(y)
+        }
+        let maxMonth = 12
+        for (let m = 1; m <= maxMonth; m++) {
+          month.push(m)
+        }
+        var pickerDevice = this.$f7.picker({
+          input: '#date-ctrl',
+          value: [that.date.year, that.date.month],
+          cols: [
+            {
+              textAlign: 'center',
+              width: '200px',
+              values: year
             },
-            loadData() {
-                gardenerApi.performanceList(this.date.year + '-' + this.date.month).then(result => {
-                    var data = result.data;
-                    this.items = data.items;
-                    this.totalTime = data.monthmaintenancetime;
-                    this.totalOrderCount = data.orderamount;
-                });
-            },
-            gotoDetail({id}) {
-                this.$router.load({url: `/gardener/performance/detail/${id}`});
+            {
+              textAlign: 'center',
+              width: '200px',
+              values: month
             }
-        },
-        components: {GaInfo}
-    }
+          ],
+          toolbarCloseText: '确定',
+          scrollToInput: false,
+          onClose ({value}) {
+            that.date.year = value[0]
+            that.date.month = value[1]
+            that.page = 1
+            that.loadData()
+
+          },
+        })
+      })
+    },
+    methods: {
+      getTimer: function (time) {
+        return getTimer(time)
+      },
+      loadData () {
+        gardenerApi.performanceList(this.date.year + '-' + this.date.month).then((result) => {
+          var data = result.data
+          this.items = data.items
+          this.totalTime = data.monthmaintenancetime
+          this.totalOrderCount = data.orderamount
+        })
+      },
+      gotoDetail ({id}) {
+        this.$router.load({url: `/gardener/performance/detail/${id}`})
+      }
+    },
+    components: {GaInfo}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
     @import "../../css/gardener/performance.scss";
 </style>

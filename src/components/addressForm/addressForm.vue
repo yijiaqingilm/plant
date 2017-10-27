@@ -30,41 +30,40 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
+  import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
 
-    export default {
-        props: {
-            address: Object
-        },
-        data() {
-            return {
-                showMap: false,
-                loadMap: false
-            }
-        },
-        created: function () {
-            setTimeout(() => {
-                this.loadMap = true;
-            }, 800);
-        },
+  export default {
+    props: {
+      address: Object
+    },
+    data () {
+      return {
+        showMap: false,
+        loadMap: false
+      }
+    },
+    created: function () {
+      let timer = 800
+      setTimeout(() => {
+        this.loadMap = true
+      }, timer)
+    },
 
-        methods: {
-            show: function () {
-                //alert('show' + this.showMap);
-                //this.showMap = true;
-                this.$refs.myMap.showFrameMap();
-            },
-            getInfo: function (address) {
-                this.showMap = false;
-                this.$refs.myMap.hideFrameMap();
-                console.log(address);
-                this.$emit('getAddressInfo', address);
-            }
-        },
-        components: {MyFrameMap},
-        computed: {}
+    methods: {
+      show: function () {
+        this.$refs.myMap.showFrameMap()
+      },
+      getInfo: function (address) {
+        this.showMap = false
+        this.$refs.myMap.hideFrameMap()
+        console.log(address)
+        this.$emit('getAddressInfo', address)
+      }
+    },
+    components: {MyFrameMap},
+    computed: {}
 
-    }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "addressForm.scss";

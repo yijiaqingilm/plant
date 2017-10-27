@@ -463,7 +463,6 @@
                     var id = new Date().getTime();
 
                     if (typeof(pageComponent) === 'object') {
-                        console.log('get 组件', pageComponent)
                         self.$set(self.pages, id, {component: pageComponent});
                         view.allowPageChange = false;
 
@@ -486,8 +485,6 @@
                             }
                         });
                     } else {
-                        console.log('get 组件', pageComponent());
-                        console.log('isload', self.isLoad);
                         if (self.isLoad) {
                             self.isLoad = false;
                             pageComponent().then(result => {
@@ -5150,7 +5147,6 @@
     };
 
     function handleRouteChangeFromFramework7(view, options, changeRouteCallback) {
-        console.log('back')
         if (!view.allowPageChange) {
             return false;
         }

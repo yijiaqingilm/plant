@@ -36,12 +36,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        data(){
-            return {}
-        },
-        methods: {},
-    }
+  export default {
+    data () {
+      return {}
+    },
+    methods: {},
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "../../css/geomaner/geomaner.scss";

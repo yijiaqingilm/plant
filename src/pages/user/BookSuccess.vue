@@ -18,7 +18,8 @@
                         <p>请保持所填写的联系电话畅通</p>
                         <p>稍后工作人员将就预约时间与您进行具体沟通</p>
                     </div>-->
-                    <div class="close"><span class="my-button" @click="$router.load({url:'/user/myOrder'})">关闭</span></div>
+                    <div class="close"><span class="my-button" @click="$router.load({url:'/user/myOrder'})">关闭</span>
+                    </div>
                 </div>
             </my-msg>
 
@@ -27,34 +28,35 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import myMsg from 'components/myMsg/myMsg.vue';
-    import {book_type} from 'lib/common'
-    import {Cache} from 'lib/utils'
-    export default {
-        data(){
-            return {
-                type: '',
-                book_type: book_type,
-                info:{}
-            }
-        },
-        created(){
-            this.type = this.$route.params.type;
-            this.info=Cache.get("successInfo");
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        components: {
-            myMsg
-        },
-        methods: {},
-    }
+  import myMsg from 'components/myMsg/myMsg.vue'
+  import { book_type } from 'lib/common'
+  import { Cache } from 'lib/utils'
+
+  export default {
+    data () {
+      return {
+        type: '',
+        book_type: book_type,
+        info: {}
+      }
+    },
+    created () {
+      this.type = this.$route.params.type
+      this.info = Cache.get('successInfo')
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    components: {
+      myMsg
+    },
+    methods: {},
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/invoiceSuccess.scss";
 </style>
 

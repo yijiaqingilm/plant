@@ -12,24 +12,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import IScorll from 'lib/iscroll'
-    export default {
-        data(){
-            return {
-                isComplete: false,
-                isLoading: false,
-                isFirstLoad: true
-            }
-        },
-        created(){
+  import IScorll from 'lib/iscroll'
 
-        },
-        mounted(){
-            this.$nextTick(() => {
-
-            });
-        }
-    }
+  export default {
+    data () {
+      return {
+        isComplete: false,
+        isLoading: false,
+        isFirstLoad: true
+      }
+    },
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "pullLoad.scss";

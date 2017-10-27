@@ -1,4 +1,4 @@
-@import "../../css/global.scss";
+@import "../../css/globalFunc";
 
 .my-msg {
   @include setFontSize($maxFontSize);
@@ -15,7 +15,7 @@
     display: flex;
     justify-content: center;
     margin-top: 50px;
-    p{
+    p {
       margin: 0;
       margin-top: 10px;
     }

@@ -51,57 +51,56 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    import Collapsed from 'components/collapsed/collapsed.vue'
-    import InfiniteLoading from 'vue-infinite-loading'
+  import { userApi } from 'api'
+  import Collapsed from 'components/collapsed/collapsed.vue'
+  import InfiniteLoading from 'vue-infinite-loading'
 
-    export default {
-        data() {
-            return {
-                orderList: [],
-                maxLen: 2,
-                page: 1,
-                noOrder: false
-            }
-        },
-        created() {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            loadData() {
-                userApi.maintenanceHistory(this.page).then(result => {
-                    console.log('result 养护记录', result);
-                    if (result.data.length > 0) {
-                        this.orderList = [].concat(this.orderList).concat(result.data);
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        this.page++;
-                    } else {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                    }
-                    if (this.orderList.length <= 0) {
-                        this.noOrder = true;
-                    }
-                });
+  export default {
+    data () {
+      return {
+        orderList: [],
+        maxLen: 2,
+        page: 1,
+        noOrder: false
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      loadData () {
+        userApi.maintenanceHistory(this.page).then((result) => {
+          if (result.data.length > 0) {
+            this.orderList = [].concat(this.orderList).concat(result.data)
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+            this.page++
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+          if (this.orderList.length <= 0) {
+            this.noOrder = true
+          }
+        })
 
-            },
-            changeShowLen(maxLen) {
-                this.maxLen = maxLen;
-            },
-            showDetail(item, id) {
-                if (item.isdelay) {
-                    return;
-                }
-                this.$router.load({url: `/user/order/detail/${id}/${item.day_at}`});
-            }
-        },
-        components: {Collapsed, InfiniteLoading}
-    }
+      },
+      changeShowLen (maxLen) {
+        this.maxLen = maxLen
+      },
+      showDetail (item, id) {
+        if (item.isdelay) {
+          return
+        }
+        this.$router.load({url: `/user/order/detail/${id}/${item.day_at}`})
+      }
+    },
+    components: {Collapsed, InfiniteLoading}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/orderList.scss";
 </style>

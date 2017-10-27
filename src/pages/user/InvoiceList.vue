@@ -20,49 +20,50 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    import InfiniteLoading from 'vue-infinite-loading'
-    export default {
-        data(){
-            return {
-                page: 1,
-                invoiceList: [],
-                //发票状态：0已申请，1处理中，2已邮寄，3已查收
-                invoiceType: {
-                    0: '已申请',
-                    1: '已申请',
-                    2: '已邮寄',
-                    3: '已邮寄'
-                }
-            }
-        },
-        created(){
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            //等待接口对接
-            loadData(){
-                userApi.invoiceHistory(this.page).then(result => {
-                    if (result.data.length > 0) {
-                        this.invoiceList = [].concat(this.invoiceList).concat(result.data);
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        this.page++;
-                    } else {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                    }
-                });
-            }
-        },
-        computed: {},
-        components: {InfiniteLoading}
-    }
+  import { userApi } from 'api'
+  import InfiniteLoading from 'vue-infinite-loading'
+
+  export default {
+    data () {
+      return {
+        page: 1,
+        invoiceList: [],
+        // 发票状态：0已申请，1处理中，2已邮寄，3已查收
+        invoiceType: {
+          0: '已申请',
+          1: '已申请',
+          2: '已邮寄',
+          3: '已邮寄'
+        }
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      // 等待接口对接
+      loadData () {
+        userApi.invoiceHistory(this.page).then((result) => {
+          if (result.data.length > 0) {
+            this.invoiceList = [].concat(this.invoiceList).concat(result.data)
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+            this.page++
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+        })
+      }
+    },
+    computed: {},
+    components: {InfiniteLoading}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/invoice.scss";
 </style>
 

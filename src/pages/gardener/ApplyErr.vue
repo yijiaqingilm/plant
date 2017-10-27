@@ -18,28 +18,29 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import  {userType, maintenanceStatus} from 'lib/common'
-    export default {
-        data(){
-            return {}
-        },
-        created(){
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {},
-        computed: {
-            getUserInfo: function () {
-                return this.$store.state.userInfo;
-            }
-        }
+  import { userType, maintenanceStatus } from 'lib/common'
+
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {},
+    computed: {
+      getUserInfo: function () {
+        return this.$store.state.userInfo
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/apply.scss";
 </style>
 

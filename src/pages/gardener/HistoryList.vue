@@ -25,48 +25,47 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import InfiniteLoading from 'vue-infinite-loading'
-    import {compose, reduce, map, prop} from 'ramda'
-    import {gardenerApi} from 'api'
-    import {Cache} from 'lib/utils'
+  import InfiniteLoading from 'vue-infinite-loading'
+  import { gardenerApi } from 'api'
+  import { Cache } from 'lib/utils'
 
-    export default {
-        data() {
-            return {
-                historyList: [],
-                page: 1
-            }
-        },
-        created() {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            loadData() {
-                gardenerApi.historyList(this.page).then(result => {
-                    if (result.data.length > 0) {
-                        this.historyList = [].concat(this.historyList).concat(result.data);
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        this.page++;
-                    } else {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                    }
-                });
-            },
-            gotoDetail(order) {
-                Cache.set('history', true);
-                this.$router.load({url: `/gardener/historyDetail/${order.shopper_id}/${order.order_id}`});
-            }
-        },
-        computed: {},
-        components: {InfiniteLoading}
-    }
+  export default {
+    data () {
+      return {
+        historyList: [],
+        page: 1
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      loadData () {
+        gardenerApi.historyList(this.page).then((result) => {
+          if (result.data.length > 0) {
+            this.historyList = [].concat(this.historyList).concat(result.data)
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+            this.page++
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+        })
+      },
+      gotoDetail (order) {
+        Cache.set('history', true)
+        this.$router.load({url: `/gardener/historyDetail/${order.shopper_id}/${order.order_id}`})
+      }
+    },
+    computed: {},
+    components: {InfiniteLoading}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/historyList.scss";
 </style>
 

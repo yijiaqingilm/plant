@@ -34,6 +34,8 @@
                                 :key="index"
                                 :status.sync="plant.status"
                                 :price="plant.price"
+                                @blur="blur"
+                                @focus="focus"
                     ></plant-item>
                     <infinite-loading :on-infinite="loadData" ref="infiniteLoading" spinner="bubbles">
                         <div slot="no-more">没有更多数据</div>
@@ -51,94 +53,116 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import InfiniteLoading from 'vue-infinite-loading'
-    import PlantItem from 'section/sell/plantItem/plantItem.vue'
-    import PlantList from 'section/sell/plantList/plantList.vue'
-    import {sellApi} from 'api'
-    import BackTop from 'components/backTop/backTop.vue'
-    import IScroll from "lib/iscroll";
+  import InfiniteLoading from 'components/infiniteLoading/components/InfiniteLoading.vue'
+  import PlantItem from 'section/sell/plantItem/plantItem.vue'
+  import PlantList from 'section/sell/plantList/plantList.vue'
+  import { sellApi } from 'api'
+  import BackTop from 'components/backTop/backTop.vue'
+  import IScroll from 'lib/iscroll'
 
-    export default {
-        data() {
-            return {
-                query: {
-                    key: ''
-                },
-                plantList: [],
-                myScroll: null,
-                showBackTop: false,
-                page: 1
-            }
+  export default {
+    data () {
+      return {
+        query: {
+          key: ''
         },
-        created() {
+        plantList: [],
+        myScroll: null,
+        showBackTop: false,
+        page: 1,
+      }
+    },
+    created () {
+      // created
+    },
+    mounted () {
+      this.$nextTick(() => {
+        let wrapperArr = document.querySelectorAll('.wrapper')
 
-        },
-        mounted() {
-            this.$nextTick(() => {
-                let wrapperArr = document.querySelectorAll('.wrapper');
+        this.myScroll = new IScroll(wrapperArr[wrapperArr.length - 1], {freeScroll: true})
+        this.myScroll.on('scrollEnd', () => {
+          let infiniteValue = 40
+          let minScroll = -200
+          if (this.myScroll.y - this.myScroll.maxScrollY <= infiniteValue) {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:infinite')
+          }
+          if (this.myScroll.y < minScroll) {
+            this.showBackTop = true
+          }
+        })
+        this.myScroll.on('scrollStart', function () {
+          let input = document.querySelectorAll('input[type="number"]')
+        })
 
-                this.myScroll = new IScroll(wrapperArr[wrapperArr.length - 1], {freeScroll: true})
-                this.myScroll.on('scrollEnd', () => {
-                    if (this.myScroll.y - this.myScroll.maxScrollY <= 40) {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:infinite');
-                    }
-                    if (this.myScroll.y < -200) {
-                        this.showBackTop = true;
-                    }
-                });
-
-
-            });
-        },
-        methods: {
-            reinit() {
-                this.page = 1;
-                this.plantList = [];
-                this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
-            },
-            async loadData() {
-                sellApi.plantList(this.page).then(result => {
-                    if (result.data.length > 0) {
-                        this.plantList = [].concat(this.plantList).concat(result.data);
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        this.page++;
-                        setTimeout(() => {
-                            this.myScroll.refresh();
-                        }, 500);
-                    } else {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                    }
-                    window.plantList = this.plantList;
-                });
-            },
-            /*@enter="enter"
-             @beforeEnter="beforeEnter"
-             @leave="leave"*/
-            beforeEnter: function (el) {
-                el.style.bottom = "100px";
-            },
-            enter: function (el, done) {
-                Velocity(el, {
-                    bottom: 0
-                }, {complate: done})
-            },
-            leave: function (el, done) {
-                Velocity(el, {
-                    bottom: 100
-                }, {complate: done})
-            },
-            initScroll: function () {
-                this.showBackTop = false;
-                this.myScroll.scrollTo(0, 0, 1000, IScroll.utils.ease.elastic);
-            },
-            backTop: function (value) {
-                console.log('value', value);
-                this.showBackTop = value;
-            },
-        },
-        components: {PlantItem, InfiniteLoading, PlantList, BackTop}
-    }
+      })
+    },
+    methods: {
+      reinit () {
+        this.page = 1
+        this.plantList = []
+        let step = 100
+        setTimeout(() => {
+          this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+        }, step)
+      },
+      loadData () {
+        sellApi.plantList(this.page).then((result) => {
+          if (result.data.length > 0) {
+            this.plantList = [].concat(this.plantList).concat(result.data)
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+            this.page++
+            let step = 500
+            setTimeout(() => {
+              this.myScroll.refresh()
+            }, step)
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+        })
+      },
+      blur () {
+        //  处理安卓机  键盘弹出后 页面上移问题
+        let wrapperArr = document.querySelectorAll('.wrapper')
+        let wrapper = wrapperArr[wrapperArr.length - 1]
+        wrapper.scrollTop = 0
+      },
+      focus () {
+        // foucus
+      },
+      /* @enter="enter"
+       @beforeEnter="beforeEnter"
+       @leave="leave"*/
+      beforeEnter: function (el) {
+        el.style.bottom = '100px'
+      },
+      enter: function (el, done) {
+        window.Velocity(el, {
+          bottom: 0
+        }, {complate: done})
+      },
+      leave: function (el, done) {
+        window.Velocity(el, {
+          bottom: 100
+        }, {complate: done})
+      },
+      initScroll: function () {
+        this.showBackTop = false
+        /*eslint no-magic-numbers: 0*/
+        this.myScroll.scrollTo(0, 0, 1000, IScroll.utils.ease.elastic)
+      },
+      backTop: function (value) {
+        console.log('value', value)
+        this.showBackTop = value
+      },
+    },
+    components: {PlantItem, InfiniteLoading, PlantList, BackTop}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "../../css/sell/addPlant.scss";
+
+    #wrapper {
+        bottom: 50px; /*no*/
+    }
+
 </style>

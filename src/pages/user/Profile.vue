@@ -57,27 +57,27 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {commonApi} from 'api'
-    export default {
-        data(){
-            return {}
-        },
-        created(){
-            console.log('profile 创建')
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        computed:{
-            userInfo(){
-                return this.$store.state.userInfo;
-            }
-        }
+  import { commonApi } from 'api'
+
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    computed: {
+      userInfo () {
+        return this.$store.state.userInfo
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/profile.scss";
 </style>

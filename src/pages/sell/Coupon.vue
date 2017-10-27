@@ -13,7 +13,7 @@
                 </div>
                 <div class="group">
                     <div class="form-label">用户名：</div>
-                    <div class="form-input"><input :value="orderInfo.company" placeholder="" type="text">
+                    <div class="form-input"><input :value="orderInfo.company" readonly placeholder="" type="text">
                     </div>
                 </div>
                 <div class="group between" @click="openPicker">
@@ -35,104 +35,126 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {sellApi} from 'api'
+  import { sellApi } from 'api'
 
-    export default {
-        data() {
-            return {
-                userNumber: '',
-                orderInfo: {
-                    userId: '',
-                    company: ''
-                },
-                couponList: [],
-                coupon: {
-                    id: '',
-                    discount: 0,
-                    name: ''
-                },
-                couponPicker: null
-            }
+  export default {
+    data () {
+      return {
+        userNumber: '',
+        orderInfo: {
+          userId: '',
+          company: ''
         },
-        created() {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
+        couponList: [],
+        coupon: {
+          id: '',
+          discount: 0,
+          name: ''
         },
-        mounted() {
-            this.$nextTick(() => {
-                let that = this;
-                sellApi.couponList().then(result => {
-                    let coupon_input = document.querySelectorAll('.coupon');
-                    let couponValues = [];
-                    let couponDisplayValues = [];
-                    this.couponList = result.data;
-                    this.couponList.forEach((item) => {
-                        couponValues.push(item.id);
-                        couponDisplayValues.push(item.name);
-                    });
-                    this.couponPicker = this.$f7.picker({
-                        closeByOutsideClick: false,
-                        input: coupon_input[coupon_input.length - 1],
-                        values: [that.coupon.id],
-                        toolbarTemplate: `<div class="toolbar">
+        couponPicker: null
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    mounted () {
+      this.$nextTick(() => {
+        let that = this
+        sellApi.couponList().then((result) => {
+          let coupon_input = document.querySelectorAll('.coupon')
+          let couponValues = []
+          let couponDisplayValues = []
+          this.couponList = result.data
+          this.couponList.forEach((item) => {
+            couponValues.push(item.id)
+            couponDisplayValues.push(item.name)
+          })
+          var isChange = true
+          this.couponPicker = this.$f7.picker({
+            closeByOutsideClick: false,
+            input: coupon_input[coupon_input.length - 1],
+            values: [that.coupon.id],
+            toolbarTemplate: `<div class="toolbar">
                                           <div class="toolbar-inner">
-                                            <div class="left"></div>
+                                            <div class="left"><a href="#" class="link cancel">取消</a></div>
                                             <div class="center">优惠券选择</div>
                                             <div class="right">
                                               <a href="#" class="link close-picker">确定</a>
                                             </div>
                                           </div>
                                        </div> `,
-                        cols: [
-                            {
-                                textAlign: 'center',
-                                values: couponValues,
-                                displayValues: couponDisplayValues
-                            }
-                        ], onClose({value}) {
-                            console.log('关闭', value);
-                            that.coupon = that.couponList.find(item => item.id == value[0]);
-                        }
-                    });
-                });
-
-
-            });
-        },
-        methods: {
-            openPicker() {
-                this.couponPicker.open();
+            cols: [
+              {
+                textAlign: 'center',
+                values: couponValues,
+                displayValues: couponDisplayValues
+              }
+            ],
+            onOpen: (picker) => {
+              isChange = true
+              picker.container.find('.cancel').on('click', () => {
+                isChange = false
+                picker.close()
+              })
             },
-            send() {
-                if (this.orderInfo.company == '') {
-                    this.$f7.alert('请输入有效的用户编号并点击确定', '');
-                    return;
-                }
-                if (this.coupon.id == '') {
-                    this.$f7.alert('请选择派发的优惠券', '');
-                    return;
-                }
-                let {userId} = this.orderInfo;
-                sellApi.couponAssign(userId, this.coupon.id).then(result => {
-                    // 成功之后的回调
-                    this.$f7.alert('优惠券派发成功，<br>用户可到\"用户中心-优惠券\"中查看', '', () => {
+            onClose ({value}) {
+              if (isChange) {
+                that.coupon = that.couponList.find((item) => parseInt(item.id, 10) === parseInt(value[0], 10))
+              }
 
-                    });
-                });
-
-            },
-            getUser() {
-                sellApi.getUserById(this.userNumber,1).then(result => {
-                    this.orderInfo.company = result.data.nickname;
-                    this.orderInfo.userId = this.userNumber;
-                });
             }
-        },
-        computed: {}
-    }
+          })
+        })
+
+      })
+    },
+    methods: {
+      openPicker () {
+        if (this.couponList.length > 0) {
+          this.couponPicker.open()
+        } else {
+          this.$f7.alert('没有可使用的优惠券', '')
+        }
+      },
+      send () {
+        if (this.orderInfo.company === '') {
+          this.$f7.alert('请输入有效的用户编号并点击确定', '')
+          return
+        }
+        if (this.coupon.id === '') {
+          this.$f7.alert('请选择派发的优惠券', '')
+          return
+        }
+        let {userId} = this.orderInfo
+        sellApi.couponAssign(userId, this.coupon.id).then((result) => {
+          this.userNumber = ''
+          this.orderInfo = {
+            userId: '',
+            company: ''
+          }
+          this.coupon = {
+            id: '',
+            discount: 0,
+            name: ''
+          }
+          // 成功之后的回调
+          this.$f7.alert('优惠券派发成功，<br>用户可到\"用户中心-优惠券\"中查看', '')
+        })
+
+      },
+      getUser () {
+        sellApi.getUserById(this.userNumber, 1).then((result) => {
+          this.orderInfo.company = result.data.nickname
+          this.orderInfo.userId = this.userNumber
+        })
+      }
+    },
+    computed: {}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "../../css/sell/coupon.scss";

@@ -126,228 +126,214 @@
                 <div class="amount">
                     <div>￥{{amount}}</div>
                 </div>
-                <div class="pay" @click="goPay">确认订单</div>
+                <div class="pay" @click="goPay">下单</div>
             </div>
         </f7-toolbar>
     </f7-page>
 </template>
 
 <script type="text/ecmascript-6">
-    import {itemType} from 'lib/common'
-    import {Cache} from 'lib/utils'
-    import {userApi, sellApi} from 'api'
-    import Counter from 'components/counter/counter.vue'
+  import { itemType } from 'lib/common'
+  import { Cache } from 'lib/utils'
+  import { userApi, sellApi } from 'api'
+  import Counter from 'components/counter/counter.vue'
 
-    export default {
-        data() {
-            return {
-                data_len: -1,
-                data: [],
-                buyList: [],
-                leaseList: [],
-                recommandList: [],
-                itemType: itemType,
-                checkAllId: 'checkALL' + Math.random(),
-                orderInfo: {},
-                userNumber: ''
-            }
-        },
-        created: function () {
-            this.userNumber = this.userId;
-            this.loadData();
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
+  export default {
+    data () {
+      return {
+        data_len: -1,
+        data: [],
+        buyList: [],
+        leaseList: [],
+        recommandList: [],
+        itemType: itemType,
+        checkAllId: 'checkALL' + Math.random(),
+        orderInfo: {},
+        userNumber: ''
+      }
+    },
+    created: function () {
+      this.userNumber = this.userId
+      this.loadData()
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      goAddressList () {
+        if (this.userId !== '') {
+          Cache.set('customer_id', this.userId)
+          this.$router.load({
+            url: '/user/address/list',
+            query: {isChange: true}
+          })
+        } else {
+          this.$f7.alert('请输入有效的用户编号并点击确定', '')
+        }
+      },
+      getUser () {
+        sellApi.getUserById(this.userNumber, 0).then(({data}) => {
+          this.$store.state.userId = this.userNumber
+          this.$store.state.user_address = data
+
+        })
+      },
+      reinit () {
+        userApi.cartList().then((result) => {
+          if (this.buyList.length === result.data.buy.length && this.leaseList.length === result.data.lease.length) {
+            // ?
+          } else {
+            this.loadData()
+          }
+        })
+
+      },
+      loadData () {
+        userApi.cartList().then((result) => {
+          if (result.data.buy === undefined || result.data.lease === undefined) {
+            return
+          }
+          this.buyList = result.data.buy
+          this.leaseList = result.data.lease
+          this.recommandList = result.data.recommend
+          if (this.buyList.length === 0 && this.leaseList.length === 0) {
+            this.data_len = 0
+            return
+          } else {
+            this.data_len = 1
+          }
+          this.buyList.forEach((item) => this.$set(item, 'checked', false))
+          this.leaseList.forEach((item) => this.$set(item, 'checked', false))
+
+        })
+      },
+      goGoodsDetail (goods) {
+        if (parseInt(goods.type, 10) === itemType.goods) {
+          this.$router.load({url: `/store/goodsDetail/${goods.recommend_id}`})
+        } else if (parseInt(goods.type, 10) === itemType.combo) {
+          this.$router.load({url: `/store/comboDetail/${goods.recommend_id}`})
+        }
+      },
+      change ({baseData, value}) {
+        userApi.editCartNum({
+          cart_id: baseData.id,
+          num: value
+        }).then((result) => {
+          let mergeList = [].concat(this.buyList).concat(this.leaseList)
+        })
+      },
+      getIds () {
+        let ids = []
+        var checkedData = [].concat(this.buyList).concat(this.leaseList).filter((item) => {
+          if (item.checked) {
+            ids.push(item.id)
+            return true
+          } else {
+            return false
+          }
+        })
+        return ids
+      },
+      delCart: function () {
+        let ids = this.getIds()
+        if (ids.length <= 0) {
+          this.$f7.alert('选择要删除的目标')
+          return
+        }
+        this.$f7.confirm('确定删除选中的目标？', '', () => {
+          // 删除逻辑
+          userApi.delCartItem(ids.join(',')).then((result) => {
+            ids.forEach((id) => {
+              let index = this.buyList.findIndex((item) => item.id === id)
+              if (index === -1) {
+                let index = this.leaseList.findIndex((item) => item.id === id)
+                this.leaseList.splice(index, 1)
+              } else {
+                this.buyList.splice(index, 1)
+              }
             })
-        },
-        methods: {
-            goAddressList() {
-                if (this.userId != '') {
-                    Cache.set("customer_id", this.userId);
-                    this.$router.load({
-                        url: '/user/address/list',
-                        query: {isChange: true}
-                    });
-                } else {
-                    this.$f7.alert('请输入有效的用户编号并点击确定', '', () => {
-
-                    });
-                }
-            },
-            getUser() {
-                sellApi.getUserById(this.userNumber,0).then(result => {
-                    this.$store.state.user_address = result.data;
-                    this.$store.state.userId = this.userNumber;
-                });
-            },
-            reinit() {
-                userApi.cartList().then(result => {
-                    if (this.buyList.length === result.data.buy.length && this.leaseList.length === result.data.lease.length) {
-
-                    } else {
-                        this.loadData();
-                    }
-                });
-
-            },
-            loadData() {
-                userApi.cartList().then(result => {
-                    console.log('result', result);
-                    if (result.data.buy === undefined || result.data.lease === undefined) {
-                        return
-                    }
-                    this.buyList = result.data.buy;
-                    this.leaseList = result.data.lease;
-                    this.recommandList = result.data.recommend;
-                    if (this.buyList.length === 0 && this.leaseList.length === 0) {
-                        this.data_len = 0;
-                        return;
-                    } else {
-                        this.data_len = 1;
-                    }
-                    this.buyList.forEach(item => {
-                        this.$set(item, 'checked', false);
-                    });
-                    this.leaseList.forEach(item => {
-                        this.$set(item, 'checked', false);
-                    });
-
-                });
-            },
-            goGoodsDetail(goods) {
-                if (goods.type == itemType.goods) {
-                    this.$router.load({url: `/store/goodsDetail/${goods.recommend_id}`});
-                } else if (goods.type == itemType.combo) {
-                    this.$router.load({url: `/store/comboDetail/${goods.recommend_id}`});
-                }
-            },
-            change({baseData, value}) {
-                userApi.editCartNum({
-                    cart_id: baseData.id,
-                    num: value
-                }).then(result => {
-                    console.log('buy', this.buyList)
-                    console.log('lease', this.leaseList);
-                    let mergeList = [].concat(this.buyList).concat(this.leaseList);
-                });
-            },
-            getIds() {
-                let ids = [];
-                var checkedData = [].concat(this.buyList).concat(this.leaseList).filter(item => {
-                    if (item.checked) {
-                        ids.push(item.id);
-                        return true;
-                    } else {
-                        return false
-                    }
-                });
-                return ids;
-            },
-            delCart: function () {
-                let ids = this.getIds();
-                if (ids.length <= 0) {
-                    this.$f7.alert('选择要删除的目标');
-                    return;
-                }
-                this.$f7.confirm("确定删除选中的目标？", '', () => {
-                    // 删除逻辑
-                    userApi.delCartItem(ids.join(',')).then(result => {
-                        ids.forEach(id => {
-                            let index = this.buyList.findIndex(item => item.id === id);
-                            if (index === -1) {
-                                let index = this.leaseList.findIndex(item => item.id === id);
-                                this.leaseList.splice(index, 1);
-                            } else {
-                                this.buyList.splice(index, 1);
-                            }
-                        });
-                        if (this.buyList.length === 0 && this.leaseList.length === 0) {
-                            this.data_len = 0;
-                        }
-
-                    });
-                });
-
-            },
-            goPay: function () {
-                let items = [];
-                [].concat(this.buyList).concat(this.leaseList).forEach(item => {
-                    if (item.checked) {
-                        items.push(item.id);
-                    }
-                });
-                console.log('items', items);
-                if (items.length <= 0) {
-                    this.$f7.alert('请选择要购买的商品');
-                    return;
-                }
-                if (this.userId == '') {
-                    this.$f7.alert('请输入有效的用户编号并点击确定');
-                    return;
-                }
-                if (this.userInfo.id == '') {
-                    this.$f7.alert('请选择地址');
-                    return;
-                }
-                userApi.addOrder(items.join(',')).then(result => {
-                    console.log('result', result);
-                    Cache.set("user_id", this.userId);
-                    Cache.set('cartList', result.data);
-                    this.$router.load({url: '/sell/pay'});
-                });
-
-
+            if (this.buyList.length === 0 && this.leaseList.length === 0) {
+              this.data_len = 0
             }
 
+          })
+        })
+
+      },
+      goPay: function () {
+        let items = [];
+        [].concat(this.buyList).concat(this.leaseList).forEach((item) => {
+          if (item.checked) {
+            items.push(item.id)
+          }
+        })
+        if (items.length <= 0) {
+          this.$f7.alert('请选择要购买的商品')
+          return
+        }
+        if (this.userId === '') {
+          this.$f7.alert('请输入有效的用户编号并点击确定')
+          return
+        }
+        if (this.userInfo.id === undefined || this.userInfo.id === '') {
+          this.$f7.alert('请选择地址')
+          return
+        }
+        // 预防手动修改数量 导致数量延迟显示。
+        let step = 1000
+        setTimeout(() => {
+          userApi.addOrder(items.join(',')).then((result) => {
+            Cache.set('user_id', this.userId)
+            Cache.set('cartList', result.data)
+            this.$router.load({url: '/sell/pay'})
+          })
+        }, step)
+
+      }
+
+    },
+    computed: {
+      checkAll: {
+        get: function () {
+          if (this.buyList.length <= 0 && this.leaseList.length <= 0) {
+            return false
+          }
+          return [].concat(this.buyList).concat(this.leaseList).every((item) => item.checked)
         },
-        computed: {
-            checkAll: {
-                get: function () {
-                    if (this.buyList.length <= 0 && this.leaseList.length <= 0) {
-                        return false;
-                    }
-                    return [].concat(this.buyList).concat(this.leaseList).every(item => item.checked == true);
-                },
-                set: function (value) {
-                    [].concat(this.buyList).concat(this.leaseList).forEach(item => {
-                        item.checked = value;
-                    });
-                }
-            },
-            amount: function () {
-                let amount = 0;
-                this.buyList.forEach(item => {
-                    if (item.checked) {
-                        amount += item.price * item.amount;
-                    }
-                });
-                this.leaseList.forEach(item => {
-                    if (item.checked) {
-                        amount += parseFloat(item.price) * item.amount;
-                    }
-                });
-                return amount.toFixed(2);
-            },
-            userInfo() {
-                return this.$store.state.user_address;
-            },
-            userId() {
-                return this.$store.state.userId;
-            }
-        },
-        watch: {
-            buyList: {
-                handler(curVal, oldVal) {
-                    console.log('curVal', curVal, 'oldVal', oldVal);
-                },
-                deep: true
-            }
-        },
-        components: {Counter}
-    }
+        set: function (value) {
+          [].concat(this.buyList).concat(this.leaseList).forEach((item) => {
+            item.checked = value
+          })
+        }
+      },
+      amount: function () {
+        let amount = 0
+        let minNum = 2
+        this.buyList.forEach((item) => {
+          if (item.checked) {
+            amount += item.price * item.amount
+          }
+        })
+        this.leaseList.forEach((item) => {
+          if (item.checked) {
+            amount += parseFloat(item.price) * item.amount
+          }
+        })
+        return amount.toFixed(minNum)
+      },
+      userInfo () {
+        return this.$store.state.user_address
+      },
+      userId () {
+        return this.$store.state.userId
+      }
+    },
+    components: {Counter}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/store/store.scss";
+
     @import "../../css/store/shoppingCart.scss";
 </style>

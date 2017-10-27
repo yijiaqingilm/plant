@@ -68,87 +68,86 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    export default {
-        data(){
-            return {
-                error: null,
-                validator: null,
-                info: {header: '', invoice: 0, taxnumber: ''},
-                min_invoice: '',
-                type: 1,// 1 公司 0  个人,
-                showTaxnumber: true
-            }
-        },
-        created(){
-            userApi.invoiceInfo().then(result => {
-                this.info.invoice = result.data.invoice;
-                this.min_invoice = result.data.min_invoice;
-            });
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                 menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            submit: function () {
-                console.log("提交表单信息");
-                if (this.info.invoice <= 0) {
-                    this.$f7.alert('申请发票金额需大于0');
-                    return;
-                }
-                if (this.info.header.length <= 0) {
-                    this.$f7.alert('请填写发票抬头');
-                    return;
-                }
-                if (this.info.taxnumber <= 0 && this.type==1) {
-                    this.$f7.alert('请填写纳税人识别号');
-                    return;
-                }
-                if (!this.getAddress.mobile || this.getAddress.mobile.length <= 0) {
-                    this.$f7.alert('请填写地址信息');
-                    return;
-                }
-                if (this.info.invoice < this.min_invoice) {
-                    this.$f7.alert(`您的发票金额不足${this.min_invoice}元<br>`, '', () => {
-                        // this.byInvice();
-                    });
-                } else {
-                    this.byInvice();
-                }
+  import { userApi } from 'api'
 
-            },
-            byInvice: function () {
-                // 成功回调内容 ==>
-                this.$f7.confirm('确定申请发票', '', () => {
-                    userApi.invoiceApply({
-                        ...this.info, ...this.getAddress,
-                        address_id: this.getAddress.id,
-                        type:this.type
-                    }).then(result => {
-                        console.log('result', result)
-                        this.$router.load({url: '/user/invoice/success'});
-                    });
-
-                });
-
-            }
-        },
-        computed: {
-            getAddress: function () {
-                return this.$store.state.default_address;
-            }
-        },
-        watch: {
-            type(value){
-                value == 0 ? this.showTaxnumber = false : this.showTaxnumber = true;
-            }
+  export default {
+    data () {
+      return {
+        error: null,
+        validator: null,
+        info: {header: '', invoice: 0, taxnumber: ''},
+        min_invoice: '',
+        type: 1, // 1 公司 0  个人,
+        showTaxnumber: true
+      }
+    },
+    created () {
+      userApi.invoiceInfo().then((result) => {
+        this.info.invoice = result.data.invoice
+        this.min_invoice = result.data.min_invoice
+      })
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      submit: function () {
+        if (this.info.invoice <= 0) {
+          this.$f7.alert('申请发票金额需大于0')
+          return
         }
+        if (this.info.header.length <= 0) {
+          this.$f7.alert('请填写发票抬头')
+          return
+        }
+        if (this.info.taxnumber <= 0 && parseInt(this.type, 10) === 1) {
+          this.$f7.alert('请填写纳税人识别号')
+          return
+        }
+        if (!this.getAddress.mobile || this.getAddress.mobile.length <= 0) {
+          this.$f7.alert('请填写地址信息')
+          return
+        }
+        if (this.info.invoice < this.min_invoice) {
+          this.$f7.alert(`您的发票金额不足${this.min_invoice}元<br>`, '', () => {
+            // this.byInvice();
+          })
+        } else {
+          this.byInvice()
+        }
+
+      },
+      byInvice: function () {
+        // 成功回调内容 ==>
+        this.$f7.confirm('确定申请发票', '', () => {
+          userApi.invoiceApply({
+            ...this.info, ...this.getAddress,
+            address_id: this.getAddress.id,
+            type: this.type
+          }).then((result) => {
+            this.$router.load({url: '/user/invoice/success'})
+          })
+
+        })
+
+      }
+    },
+    computed: {
+      getAddress: function () {
+        return this.$store.state.default_address
+      }
+    },
+    watch: {
+      type (value) {
+        parseInt(value, 10) === 0 ? this.showTaxnumber = false : this.showTaxnumber = true
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/invoice.scss";
 </style>
 

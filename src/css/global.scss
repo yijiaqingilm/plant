@@ -1,5 +1,11 @@
 @import "globalFunc.scss";
 @import "resetFramework7.scss";
+/* 动画库*/
+@import "~animate.css/source/_base.css";
+@import "~animate.css/source/sliding_entrances/slideInUp.css";
+@import "~animate.css/source/sliding_exits/slideOutDown.css";
+@import "~animate.css/source/fading_entrances/fadeInUp.css";
+@import "~animate.css/source/fading_exits/fadeOutUp.css";
 
 body, p {
   @include setFontSize($baseFontSize);
@@ -113,6 +119,10 @@ img {
 
 .mt-10 {
   margin-top: 10px;
+}
+
+.mt-15 {
+  margin-top: 15px; /*no*/
 }
 
 .color-theme {
@@ -397,6 +407,23 @@ img {
   padding: 10px 35px;
 }
 
+.notice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: $warn_color;
+  padding: 20px 35px;
+  background: #FEF7D6;
+  @include setFontSize($middleFontSize);
+  @include ellipsis;
+  img {
+    width: 35px;
+    height: 35px;
+    margin-right: 20px;
+  }
+}
+
 // 选地址组件
 .address {
   position: relative;
@@ -480,21 +507,6 @@ img {
       padding-left: 25px; /*no*/
     }
   }
-  .week-list {
-    position: relative;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    padding: 20px 35px;
-    flex-wrap: wrap;
-    &:after {
-      @include onepx;
-    }
-    > span {
-      margin-bottom: 20px;
-      margin-right: 0;
-    }
-  }
   .time-zones {
     display: flex;
     width: 100%;
@@ -563,7 +575,6 @@ img {
   background-color: #EC6976;
   text-align: center;
   @include setFontSize($miniFontSize);
-
 }
 
 .icon_success {
@@ -822,7 +833,7 @@ textarea {
   }
 }
 
-#wrapper {
+.wrapper {
   position: absolute;
   top: 44px; /*no*/
   left: 0;
@@ -831,8 +842,303 @@ textarea {
   overflow: hidden;
 }
 
+.wrapper_zone {
+  position: absolute;
+  top: 94px; /*no*/
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+}
 
+/*全局的 图标*/
 
+.triangle {
+  display: inline-block;
+  width: 10px; /*no*/
+  height: 10px; /*no*/
+  background: url("~assets/icon_active_triangle.png") no-repeat;
+  background-position-x: 90%;
+  background-position-y: center;
+  background-size: 10px 10px; /*no*/
+}
+
+@mixin baseProps {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+
+.icon_edit {
+  @include baseProps;
+  background: url("~assets/address_edit.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.icon_remark {
+  @include baseProps;
+  background: url("~assets/icon_remark2.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.icon_del {
+  @include baseProps;
+  background: url("~assets/address_del.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.phone_icon {
+  position: absolute;
+  top: -10px; /*no*/
+  right: -35px; /*no*/
+  display: inline-block;
+  width: 30px; /*no*/
+  height: 30px; /*no*/
+  background: url("~assets/icon_phone.png") no-repeat;
+  background-size: 30px 30px; /*no*/
+}
+
+.icon_plant {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url("~assets/home/icon_plant.png") no-repeat;
+  background-size: 100% 100%;
+  vertical-align: middle;
+}
+
+.icon_bao {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url("~assets/home/icon_bao.png") no-repeat;
+  background-size: 100% 100%;
+  vertical-align: text-bottom;
+  margin-left: 10px;
+}
+
+.icon_te {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url("~assets/home/icon_te.png") no-repeat;
+  background-size: 100% 100%;
+  vertical-align: text-bottom;
+  margin-left: 10px;
+}
+
+.bg_buy {
+  background: url("~assets/home/icon_buy.png") no-repeat;
+  background-position: center center;
+  background-size: 417px 110px;
+}
+
+.bg_lease {
+  background: url("~assets/home/icon_lease.png") no-repeat;
+  background-position: center center;
+  background-size: 417px 110px;
+}
+
+.icon_x {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url("~assets/home/icon_x.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+/* 公共养护列表*/
+.plant-list {
+  .item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: 30px 25px;
+    &:after {
+      @include onepx;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+    }
+    .photo {
+      flex: 0 0 100px;
+      padding-left: 35px;
+      &.no-padding {
+        padding-left: 0;
+      }
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .info {
+      flex: 1;
+      padding-left: 25px;
+      .name {
+        display: flex;
+        width: 100%;
+        > span {
+          &:first-child {
+            max-width: 60%;
+            margin-right: 20px; /*no*/
+            @include ellipsis;
+          }
+        }
+      }
+      .notes {
+        color: $theme_color;
+      }
+      .detail {
+        display: flex;
+        width: 100%;
+        align-items: baseline;
+        > div {
+          &:first-child {
+
+          }
+          &:last-child {
+            flex: 1;
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+.icon_map {
+  width: 30px; /*no*/
+  height: 30px; /*no*/
+  background: url("~assets/icon_address2.png") no-repeat;
+  background-size: 100%;
+  background-position: center;
+}
+
+/*公共养护 header*/
+.plant-header {
+  width: 100%;
+  padding: 50px 35px;
+  margin: 0 auto;
+  text-align: center;
+  > div:first-child {
+    @include setFontSize($middleFontSize);
+    color: $theme_color;
+  }
+  > div:last-child {
+    padding-top: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .address {
+      @include ellipsis;
+    }
+    .location {
+      color: $theme_color;
+      padding-left: 20px;
+    }
+    p {
+      padding-bottom: 15px;
+    }
+    .phone {
+      position: relative;
+      span.icon_phone {
+        position: absolute;
+        top: -15px; /*no*/
+        right: -35px; /*no*/
+        display: inline-block;
+        width: 30px; /*no*/
+        height: 30px; /*no*/
+        background: url("~assets/icon_phone.png") no-repeat;
+        background-size: 30px 30px; /*no*/
+      }
+    }
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.plant-header2 {
+  @extend .plant-header;
+  position: absolute;
+  top: 44px; /*no*/
+  background: #ffffff;
+  z-index: 1001;
+}
+
+/*公共扫一扫*/
+.scan {
+  background: url("~assets/icon_scan.png") no-repeat;
+  background-size: 110px 110px;
+  background-position: center;
+  width: 100%;
+  height: 110px;
+}
+
+/* icon ——time*/
+.icon_time {
+  display: inline-block;
+  vertical-align: middle;
+  width: 34px;
+  height: 34px;
+  background: url("~assets/icon_calendar.png") no-repeat;
+  background-size: 34px 34px;
+}
+
+.icon_adddress2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  background: url("~assets/icon_address2.png") no-repeat;
+  background-size: 50px 50px;
+  margin-right: 10px;
+}
+
+/* icon ——time*/
+.icon_time {
+  display: inline-block;
+  vertical-align: middle;
+  width: 34px;
+  height: 34px;
+  background: url("~assets/icon_calendar.png") no-repeat;
+  background-size: 34px 34px;
+}
+
+/*store 公共样式*/
+
+.cart {
+  @include top_right_icon;
+  background: url("~assets/icon_cart3.png") no-repeat;
+  background-size: 100%;
+}
+
+.cart_del {
+  @include top_right_icon;
+  width: 50px;
+  height: 50px;
+  background: url("~assets/cart_del.png") no-repeat;
+  background-size: 100%;
+}
+
+.icon_issue {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background: url("~assets/icon_issue.png") no-repeat;
+  background-size: 100%;
+  margin-left: 10px;
+}
 
 
 

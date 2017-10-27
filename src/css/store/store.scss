@@ -1,49 +1,4 @@
-@import "../globalFunc";
 
-
-.searchbar {
-  position: absolute;
-  width: 100%;
-  background: transparent;
-  input[type="search"] {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0; /*no*/
-    z-index: 200;
-    background-color: rgba(255,255,255,0.3);
-    border: 1px solid #ffffff; /*no*/
-    color: #ffffff;
-    background-image: url("../../assets/search.png");
-    &::-webkit-input-placeholder {
-      color: #ffffff;
-    }
-  }
-}
-
-
-
-.cart {
-  @include top_right_icon;
-  background: url("../../assets/icon_cart3.png") no-repeat;
-  background-size: 100%;
-}
-
-.cart_del {
-  @include top_right_icon;
-  width: 50px;
-  height: 50px;
-  background: url("../../assets/cart_del.png") no-repeat;
-  background-size: 100%;
-}
-.icon_issue{
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background: url("../../assets/icon_issue.png") no-repeat;
-  background-size: 100%;
-  margin-left: 10px;
-}
 
 
 

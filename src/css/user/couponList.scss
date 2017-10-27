@@ -1,59 +1,181 @@
 @import "../globalFunc";
-.couponList {
 
-  .coupon-list {
+.couponList {
+  /*.coupon-list {
     position: absolute;
-    /*top: 70px;*/
+    !*top: 70px;*!
     bottom: 0;
     width: 100%;
     height: 100%;
-    .coupon {
-      display: flex;
-      width: 620px;
-      height: 125px;
-      margin: 30px auto;
-      &.active {
-        .left {
-          background: url("../../assets/active_coupon_left.png") no-repeat;
-          background-size: 100%;
-        }
-        .right {
-          background: url("../../assets/active_coupon_right.png") no-repeat;
-          background-size: 100%;
-          .title {
-            color: $theme_color;
-            @include setFontSize($maxFontSize);
-          }
-        }
+  }*/
+}
+
+.coupon {
+  display: flex;
+  width: 620px;
+  height: 125px;
+  margin: 30px auto;
+  &.active {
+    .left {
+      background: url("../../assets/active_coupon_left.png") no-repeat;
+      background-size: 100%;
+    }
+    .right {
+      background: url("../../assets/active_coupon_right.png") no-repeat;
+      background-size: 100%;
+      .title {
+        color: $theme_color;
+        @include setFontSize($maxFontSize);
       }
-      .left {
-        flex: 0 0 220px;
-        width: 220px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: url("../../assets/coupon_left.png") no-repeat;
-        background-size: 100%;
-        color: #FFFFFF;
-        @include setFontSize($superMaxFontSize);
-      }
-      .right {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding-left: 30px;
-        background: url("../../assets/coupon_right.png") no-repeat;
-        background-size: 100%;
-        .title {
-          color: #666666;
-          @include setFontSize($maxFontSize);
-        }
-        .context, .valid-time {
-          color: #666666;
-          @include setFontSize($miniFontSize);
+    }
+  }
+  .left {
+    flex: 0 0 220px;
+    width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("../../assets/coupon_left.png") no-repeat;
+    background-size: 100%;
+    color: #FFFFFF;
+    @include setFontSize($superMaxFontSize);
+  }
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 30px;
+    background: url("../../assets/coupon_right.png") no-repeat;
+    background-size: 100%;
+    .title {
+      color: #666666;
+      @include setFontSize($maxFontSize);
+    }
+    .context, .valid-time {
+      color: #666666;
+      @include setFontSize($miniFontSize);
+    }
+  }
+}
+
+.coupon-new {
+  width: 620px;
+  margin: 30px auto;
+  padding: 20px 30px;
+  &.active {
+    background: url("../../assets/coupon_active.png") no-repeat;
+    background-size: 100% 100%;
+    .title {
+      color: $theme_color;
+      @include setFontSize($maxFontSize);
+    }
+    .context {
+      color: $theme_color;
+      li {
+        > div {
+          color: #999;
         }
       }
     }
   }
+  &.use {
+    background: url("../../assets/coupon_use.png") no-repeat;
+    background-size: 100% 100%;
+  }
+  &.bad {
+    background: url("../../assets/coupon_bad.png") no-repeat;
+    background-size: 100% 100%;
+  }
+  &.expire {
+    background: url("../../assets/coupon_expire.png") no-repeat;
+    background-size: 100% 100%;
+  }
+  background: url("../../assets/coupon.png") no-repeat;
+  background-size: 100% 100%;
+  .title {
+    font-weight: bold;
+    color: #999;
+  }
+  .context {
+    color: #999;
+    margin: 0;
+    padding-left: 30px;
+    li {
+      > div {
+        color: #999;
+        @include setFontSize($miniFontSize);
+      }
+    }
+  }
+}
+
+.show-coupon-lose {
+  width: 165px; /*no*/
+  margin: 0 auto;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+  color: #999;
+  border: 1px solid #999; /*no*/
+
+}
+
+.sigma-content {
+  margin: 20px auto; /*no*/
+  text-align: center;
+  background-color: #fff;
+  color: #999;
+}
+
+.sigma-middle-line:before {
+  content: '';
+  display: block;
+  height: 1px; /*no*/
+  width: 100%;
+  background-color: #999; /*颜色需与主题大背景色一致*/
+  position: relative;
+  top: 10px; /*no*/
+  left: 0;
+}
+
+.sigma-line-text {
+  display: inline-block;
+  background: #fff;
+  padding: 0 18px 0 18px; /*no*/
+  position: relative;
+}
+
+.coupon-get {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.help-desc {
+  width: 620px;
+  border: 1px solid #999; /*no*/
+  border-radius: 13px;
+  color: #999;
+  padding: 20px 0;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.help {
+  padding: 35px;
+
+  > p {
+    @include setFontSize($baseFontSize);
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.myMobile {
+  position: relative;
+  color: $theme_color;
 }

@@ -55,91 +55,86 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    import {sortType} from 'lib/common'
+  import { userApi } from 'api'
+  import { sortType } from 'lib/common'
 
-    export default {
-        props: {
-            sortIndexs: {
-                type: Array,
-                default: function () {
-                    return [0, 1, 2]
-                }
-            }
-        },
-        data() {
-            return {
-                modalType: 0,
-                sortList: [
-                    {id: 0, name: "综合排序"},
-                    {id: 1, name: "适用场景"},
-                    {id: 2, name: "价格区间"},
-                    {id: 3, name: "适用面积"}
-                ],
-                sceneList: [
-                    {id: 1, name: '室内场景', type: sortType.scene},
-                    {id: 2, name: '室外场景', type: sortType.scene},
-                    {id: 3, name: '室内靠窗场景', type: sortType.scene}
-                ],
-                areaList: [],
-                priceList: [],
-                min_price: 100,
-                max_price: 200,
-                min_area: 100,
-                max_area: 200,
-                showSortModal: true
-            }
-        },
-        created() {
-            this.sortList = this.sortList.filter((item) => {
-                return this.sortIndexs.indexOf(item.id) !== -1;
-            });
-            userApi.areaList().then(result => {
-                this.areaList = result.data;
-                this.areaList.forEach(item => {
-                    this.$set(item, 'type', sortType.area);
-                });
-            });
-            userApi.priceList().then(result => {
-                console.log('价格', result);
-                this.priceList = result.data;
-                this.priceList.forEach(item => {
-                    this.$set(item, 'type', sortType.price);
-                });
-            })
-        },
-        methods: {
-            closeModal() {
-                this.modalType = -1;
-            },
-            showModal(type) {
-                this.modalType = type;
-                this.showSortModal = true;
-                //综合排序直接返回数据
-                if (type === 0) {
-                    this.$emit("changeItem", {type: sortType.comprehensive});
-                    this.modalType = 0;
-                }
-            },
-            changeItem(item) {
-                this.$emit("changeItem", item);
-                //this.modalType = -1;
-                this.showSortModal = false
-            },
-            customTime() {
-                let item = {min_price: this.min_price, max_price: this.max_price, type: sortType.customPrice};
-                this.$emit("changeItem", item);
-                //this.modalType = -1;
-                this.showSortModal = false
-            },
-            customArea() {
-                let item = {min_area: this.min_area, max_area: this.max_area, type: sortType.customArea};
-                this.$emit("changeItem", item);
-                //this.modalType = -1;
-                this.showSortModal = false
-            }
+  export default {
+    props: {
+      sortIndexs: {
+        type: Array,
+        default: function () {
+          /* eslint no-magic-numbers: 0 */
+          return [0, 1, 2]
         }
+      }
+    },
+    data () {
+      return {
+        modalType: 0,
+        sortList: [
+          {id: 0, name: '综合排序'},
+          {id: 1, name: '适用场景'},
+          {id: 2, name: '价格区间'},
+          {id: 3, name: '适用面积'}
+        ],
+        sceneList: [
+          {id: 1, name: '室内场景', type: sortType.scene},
+          {id: 2, name: '室外场景', type: sortType.scene},
+          {id: 3, name: '室内靠窗场景', type: sortType.scene}
+        ],
+        areaList: [],
+        priceList: [],
+        min_price: 100,
+        max_price: 200,
+        min_area: 100,
+        max_area: 200,
+        showSortModal: true
+      }
+    },
+    created () {
+      this.sortList = this.sortList.filter((item) => this.sortIndexs.indexOf(item.id) !== -1)
+      userApi.areaList().then((result) => {
+        this.areaList = result.data
+        this.areaList.forEach((item) => {
+          this.$set(item, 'type', sortType.area)
+        })
+      })
+      userApi.priceList().then((result) => {
+        this.priceList = result.data
+        this.priceList.forEach((item) => {
+          this.$set(item, 'type', sortType.price)
+        })
+      })
+    },
+    methods: {
+      closeModal () {
+        this.modalType = -1
+      },
+      showModal (type) {
+        this.modalType = type
+        this.showSortModal = true
+        // 综合排序直接返回数据
+        if (type === 0) {
+          this.$emit('changeItem', {type: sortType.comprehensive})
+          this.modalType = 0
+        }
+      },
+      changeItem (item) {
+        this.$emit('changeItem', item)
+        this.showSortModal = false
+      },
+      customTime () {
+        let item = {min_price: this.min_price, max_price: this.max_price, type: sortType.customPrice}
+        this.$emit('changeItem', item)
+        this.showSortModal = false
+      },
+      customArea () {
+        let item = {min_area: this.min_area, max_area: this.max_area, type: sortType.customArea}
+        this.$emit('changeItem', item)
+        this.showSortModal = false
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "sortModal.scss";

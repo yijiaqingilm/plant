@@ -105,127 +105,127 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
-    import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
-    import {gardenerApi} from 'api'
-    import {Validator} from 'lib/custom_validator';
+  import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
+  import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
+  import { gardenerApi } from 'api'
+  import { Validator } from 'lib/custom_validator'
 
-    export default {
-        data() {
-            return {
-                sex: {
-                    1: '男',
-                    2: '女'
-                },
-                user: {
-                    realname: '',
-                    // 性别1男，2女 ,
-                    sex: '1',
-                    mobile: '',
-                    address: '',
-                    addressdetail: '',
-                    avatar: '',
-                    location: '',
-                    identity: ''
-                },
-                errors: null,
-                validator: null,
-                idCardImageFront: require('../../assets/icon-camera2.png'),
-                idCardImageBack: require('../../assets/icon-camera1.png'),
-                load: false
-            }
+  let idCardImageFront = require('../../assets/icon-camera2.png')
+  let idCardImageBack = require('../../assets/icon-camera1.png')
+  export default {
+    data () {
+      return {
+        sex: {
+          1: '男',
+          2: '女'
         },
-        created: function () {
-            this.validator = new Validator({
-                realname: 'required',
-                identity: 'required',
-                mobile: 'required|mobile',
-                address: 'required',
-                addressdetail: 'required'
-            });
-            this.$set(this, 'errors', this.validator.errorBag);
-            gardenerApi.getMaintenance().then(result => {
-                console.log('result', result);
-                this.user = result.data;
-
-                if (this.user.lng != '' || this.user.lat != '') {
-                    this.user.location = this.user.lng + ',' + this.user.lat;
-                }
-
-                if (this.user.identityfront != '' && this.user.identityfront != null) {
-                    this.idCardImageFront = this.user.identityfront;
-                }
-                if (this.user.identityback != '' && this.user.identityback != null) {
-                    this.idCardImageBack = this.user.identityback;
-                }
-
-            });
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
+        user: {
+          realname: '',
+          // 性别1男，2女 ,
+          sex: '1',
+          mobile: '',
+          address: '',
+          addressdetail: '',
+          avatar: '',
+          location: '',
+          identity: ''
         },
-        methods: {
-            showMap() {
-                this.$refs.myMap.showFrameMap();
-            },
-            init() {
-                /*延迟加载地图资源 */
-                setTimeout(() => {
-                    this.load = true;
-                }, 500);
+        errors: null,
+        validator: null,
+        idCardImageFront: idCardImageFront,
+        idCardImageBack: idCardImageBack,
+        load: false
+      }
+    },
+    created: function () {
+      this.validator = new Validator({
+        realname: 'required',
+        identity: 'required',
+        mobile: 'required|mobile',
+        address: 'required',
+        addressdetail: 'required'
+      })
+      this.$set(this, 'errors', this.validator.errorBag)
+      gardenerApi.getMaintenance().then((result) => {
+        console.log('result', result)
+        this.user = result.data
 
-            },
-            submit() {
-                this.validator.validateAll({
-                    realname: this.user.realname,
-                    identity: this.user.identity,
-                    mobile: this.user.mobile,
-                    address: this.user.address,
-                    addressdetail: this.user.addressdetail
-                })
-                console.log(this.errors);
+        if (this.user.lng !== '' || this.user.lat !== '') {
+          this.user.location = this.user.lng + ',' + this.user.lat
+        }
 
-                //  校验信息
-                if (this.errors.errors.length > 0) {
-                    this.$f7.alert(this.errors.errors[0].msg);
-                    return;
-                }
-                console.log(this.user, 'user');
-                gardenerApi.updateProfile(this.user).then(data => {
-                    console.log(data, 'data');
-                    this.$f7.alert(data.result, '', () => {
-                    })
+        if (this.user.identityfront !== '' && this.user.identityfront !== null) {
+          this.idCardImageFront = this.user.identityfront
+        }
+        if (this.user.identityback !== '' && this.user.identityback !== null) {
+          this.idCardImageBack = this.user.identityback
+        }
 
-                }).catch(err => {
-                    console.log(err)
-                });
-            },
-            getAddressInfo(address) {
-                console.log(address);
-                this.$refs.myMap.hideFrameMap();
-                let address_info = address.district + address.street + address.name;
-                this.user.address = address_info;
-                this.user.location = address.location;
-                this.user.lng = address.location.split(',')[0];
-                this.user.lat = address.location.split(',')[1];
-            },
-            getBlob(blob) {
-                this.user.avatar = blob;
-            },
-            getIdCardFront(blob) {
-                gardenerApi.updateIdCard(blob, 'front');
-            },
-            getIdCardBack(blob) {
-                gardenerApi.updateIdCard(blob, 'back');
-            }
-        },
-        components: {MyImageUpload, MyFrameMap}
-    }
+      })
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      showMap () {
+        this.$refs.myMap.showFrameMap()
+      },
+      init () {
+        let step = 500
+        /* 延迟加载地图资源 */
+        setTimeout(() => {
+          this.load = true
+        }, step)
+
+      },
+      submit () {
+        this.validator.validateAll({
+          realname: this.user.realname,
+          identity: this.user.identity,
+          mobile: this.user.mobile,
+          address: this.user.address,
+          addressdetail: this.user.addressdetail
+        })
+        console.log(this.errors)
+
+        //  校验信息
+        if (this.errors.errors.length > 0) {
+          this.$f7.alert(this.errors.errors[0].msg)
+          return
+        }
+        console.log(this.user, 'user')
+        gardenerApi.updateProfile(this.user).then((data) => {
+          this.$f7.alert(data.result, '')
+
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+      getAddressInfo (address) {
+        console.log(address)
+        this.$refs.myMap.hideFrameMap()
+        let address_info = address.district + address.street + address.name
+        this.user.address = address_info
+        this.user.location = address.location
+        this.user.lng = address.location.split(',')[0]
+        this.user.lat = address.location.split(',')[1]
+      },
+      getBlob (blob) {
+        this.user.avatar = blob
+      },
+      getIdCardFront (blob) {
+        gardenerApi.updateIdCard(blob, 'front')
+      },
+      getIdCardBack (blob) {
+        gardenerApi.updateIdCard(blob, 'back')
+      }
+    },
+    components: {MyImageUpload, MyFrameMap}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
     @import "../../css/gardener/apply.scss";
 </style>
 

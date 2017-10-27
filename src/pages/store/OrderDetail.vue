@@ -58,15 +58,23 @@
                         <div>￥{{orderInfo.buys.saleprice}}</div>
                     </div>
                     <div class="order-info-group ">
-                        <div>配送费用</div>
+                        <div>配送及人工费用</div>
                         <div>￥{{orderInfo.shipfee}}</div>
                     </div>
                     <div class="order-info-group ">
                         <div>优惠金额</div>
                         <div>￥{{orderInfo.discount}}</div>
                     </div>
+                    <div class="order-info-group" v-if="giveService">
+                        <div>优惠服务</div>
+                        <div>{{giveService}}</div>
+                    </div>
+                    <div class="order-info-group" v-if="giveGoods">
+                        <div>优惠赠品</div>
+                        <div>{{giveGoods}}</div>
+                    </div>
                     <div class="order-info-group ">
-                        <div >实付金额</div>
+                        <div>实付金额</div>
                         <div class="color-warn">￥{{orderInfo.payment}}</div>
                     </div>
                     <div class="order-info-group ">
@@ -137,7 +145,7 @@
                         <div>￥{{orderInfo.leases.deposit}}</div>
                     </div>
                     <div class="order-info-group ">
-                        <div>配送费用</div>
+                        <div>配送及人工费用</div>
                         <div>￥{{orderInfo.shipfee}}</div>
                     </div>
 
@@ -172,6 +180,14 @@
                         <div>优惠金额</div>
                         <div>￥{{orderInfo.discount}}</div>
                     </div>
+                    <div class="order-info-group" v-if="giveService">
+                        <div>优惠服务</div>
+                        <div>{{giveService}}</div>
+                    </div>
+                    <div class="order-info-group" v-if="giveGoods">
+                        <div>优惠赠品</div>
+                        <div>{{giveGoods}}</div>
+                    </div>
                     <div class="order-info-group">
                         <div>实付金额</div>
                         <div class="color-warn">￥{{orderInfo.payment}}</div>
@@ -185,8 +201,7 @@
                     <div class="goods-wrap">
                         <div class="goods-type">
                             <div>订单{{orderInfo.order_id}}</div>
-                            <div>
-                                <span class="status" :class="{warn:plantOrderStatus[orderInfo.status].warn}">{{plantOrderStatus[orderInfo.status].value}}</span>
+                            <div><span>合计：</span><span class="color-warn">￥{{orderInfo.maintenance.leaseprice}}</span>
                             </div>
                         </div>
                         <collapsed class="goods-list" :listLen="orderInfo.maintenance.items.length"
@@ -258,6 +273,14 @@
                         <div>优惠金额</div>
                         <div>￥{{orderInfo.discount}}</div>
                     </div>
+                    <div class="order-info-group" v-if="giveService">
+                        <div>优惠服务</div>
+                        <div>{{giveService}}</div>
+                    </div>
+                    <div class="order-info-group" v-if="giveGoods">
+                        <div>优惠赠品</div>
+                        <div>{{giveGoods}}</div>
+                    </div>
                     <div class="order-info-group">
                         <div>实付金额</div>
                         <div class="color-warn">￥{{orderInfo.payment}}</div>
@@ -269,88 +292,121 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    import {weekList, goodsType, itemType} from 'lib/common'
-    import MyPicker from 'components/myPickerModal/myPickerModal.vue'
-    import UserFooter from 'section/user/footer/footer.vue'
-    import Counter from 'components/counter/counter.vue'
-    import TypeSelector from 'components/typeSelector/typeSelector.vue'
-    import Collapsed from 'components/collapsed/collapsed.vue'
+  import { userApi } from 'api'
+  import { weekList, goodsType, itemType, couponGiveType } from 'lib/common'
+  import MyPicker from 'components/myPickerModal/myPickerModal.vue'
+  import UserFooter from 'section/user/footer/footer.vue'
+  import Counter from 'components/counter/counter.vue'
+  import TypeSelector from 'components/typeSelector/typeSelector.vue'
+  import Collapsed from 'components/collapsed/collapsed.vue'
 
-    export default {
-        data() {
-            return {
-                order_id: -1,
-                /*购买显示的最大条数*/
-                maxBuysLen: 2,
-                maxLeaseLen: 2,
-                orderInfo: null,
-                weekList: weekList,
-                weekName: '',
-                itemType: itemType,
-                //租赁订单（购买/租赁订单）状态：0未付款，1已付款，2配送中，3养护中，5已到期，6已收回，8已完成，9已取消
-                plantOrderStatus: {
-                    0: {value: '用户未支付', warn: true},
-                    18: {value: '待核账', warn: true}, /*等待财务收款*/
-                    1: {value: '用户已付款', warn: false},
-                    2: {value: '用户已付款', warn: false},//配送中
-                    3: {value: '用户已付款', warn: false},//养护中
-                    5: {value: '用户已付款', warn: false},//养护到期
-                    6: {value: '用户已付款', warn: false},//已收回
-                    8: {value: '用户已付款', warn: false},//已完成
-                    9: {value: '订单已取消', warn: false},//已取消
-                    14: {value: '订单已取消', warn: true},//已退款
+  export default {
+    data () {
+      return {
+        order_id: -1,
+        /* 购买显示的最大条数*/
+        maxBuysLen: 2,
+        maxLeaseLen: 2,
+        orderInfo: null,
+        weekList: weekList,
+        weekName: '',
+        itemType: itemType,
+        // 租赁订单（购买/租赁订单）状态：0未付款，1已付款，2配送中，3养护中，5已到期，6已收回 7.养护到期，8已完成，9已取消
+        plantOrderStatus: {
+          0: {value: '用户未支付', warn: true},
+          18: {value: '待核账', warn: true}, /* 等待财务收款*/
+          1: {value: '用户已付款', warn: false},
+          2: {value: '用户已付款', warn: false}, // 配送中
+          3: {value: '养护中', warn: false}, // 养护中
+          5: {value: '养护中', warn: false}, // 养护到期
+          6: {value: '已收回', warn: false}, // 已收回
+          7: {value: '养护中', warn: false}, // 养护到期
+          8: {value: '已完成', warn: false}, // 已完成
+          9: {value: '订单已取消', warn: false}, // 已取消
+          14: {value: '已退款', warn: true}, // 已退款
 
-                },
-            }
         },
-        created() {
-            this.order_id = this.$route.params.goodsId;
-            userApi.orderDetail(this.order_id).then(result => {
-                console.log('result', result)
-                this.orderInfo = result.data;
-                if (this.orderInfo.leases.week) {
-                    this.weekName = this.orderInfo.leases.week.map(item => {
-                        return weekList.find(week => {
-                            return week.id === item
-                        }).name
-                    }).join(',');
-                }
-                if (this.orderInfo.maintenance.week) {
-                    this.weekName = this.orderInfo.maintenance.week.map(item => {
-                        return weekList.find(week => {
-                            return week.id === item
-                        }).name
-                    }).join(',');
-                }
+      }
+    },
+    created () {
+      this.order_id = this.$route.params.goodsId
+      userApi.orderDetail(this.order_id).then((result) => {
+        this.orderInfo = result.data
+        if (this.orderInfo.leases.week) {
+          this.weekName = this.orderInfo.leases.week.map((item) => weekList.find((week) => week.id === item).name).join(',')
+        }
+        if (this.orderInfo.maintenance.week) {
+          this.weekName = this.orderInfo.maintenance.week.map((item) => weekList.find((week) => week.id === item).name).join(',')
+        }
 
-            });
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        mounted() {
-            console.log('mounted')
-        },
-        methods: {
-            changeShowBuysLen: function (maxLen) {
-                this.maxBuysLen = maxLen;
-            },
-            changeShowLeaseLen: function (maxLen) {
-                this.maxLeaseLen = maxLen;
-            },
-        },
-        computed: {},
-        components: {
-            Counter, UserFooter, MyPicker, TypeSelector, Collapsed
-        },
+      })
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    mounted () {
+      console.log('mounted')
+    },
+    methods: {
+      changeShowBuysLen: function (maxLen) {
+        this.maxBuysLen = maxLen
+      },
+      changeShowLeaseLen: function (maxLen) {
+        this.maxLeaseLen = maxLen
+      },
 
-    }
+    },
+    computed: {
+      giveService () {
+        let buysCoupon = this.orderInfo.buys.couponitems[0] || {}
+        let leasesCoupon = this.orderInfo.leases.couponitems[0] || {}
+        let maintenanceCoupon = this.orderInfo.maintenance.couponitems[0] || {}
+        let giveService = ''
+        if (buysCoupon.coupon_type === couponGiveType.service) {
+          giveService += buysCoupon.num + ','
+        }
+        if (leasesCoupon.coupon_type === couponGiveType.service) {
+          giveService += leasesCoupon.num + ','
+        }
+        if (maintenanceCoupon.coupon_type === couponGiveType.service) {
+          giveService += maintenanceCoupon.num + ','
+        }
+        if (giveService) {
+          giveService = giveService.slice(0, -1)
+        }
+        return giveService
+      },
+      giveGoods () {
+        let buysCoupon = this.orderInfo.buys.couponitems[0] || {}
+        let leasesCoupon = this.orderInfo.leases.couponitems[0] || {}
+        let maintenanceCoupon = this.orderInfo.maintenance.couponitems[0] || {}
+        let giveGoods = ''
+        if (buysCoupon.coupon_type === couponGiveType.goods) {
+          giveGoods += buysCoupon.item + ','
+        }
+        if (leasesCoupon.coupon_type === couponGiveType.goods) {
+          giveGoods += leasesCoupon.item + ','
+        }
+        if (maintenanceCoupon.coupon_type === couponGiveType.goods) {
+          giveGoods += maintenanceCoupon.item + ','
+        }
+        if (giveGoods) {
+          giveGoods = giveGoods.slice(0, -1)
+        }
+
+        return giveGoods
+      }
+    },
+    components: {
+      Counter, UserFooter, MyPicker, TypeSelector, Collapsed
+    },
+
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/store/store.scss";
+
     @import "../../css/store/pay.scss";
 </style>
 

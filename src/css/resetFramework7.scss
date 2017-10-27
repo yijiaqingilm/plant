@@ -99,16 +99,29 @@ html:not(.watch-active-state) .list-block .item-link:active .item-inner:after, h
 .item-link {
   background-color: #EEEEEE;
 }
-.picker-modal{
+
+.picker-modal {
   .toolbar {
     background: #eaeaea;
     .toolbar-inner {
       .center {
-        width: 100%;
-        position: absolute;
+        /*width: 100%;
+        position: absolute;*/
         text-align: center;
         color: #000000;
       }
     }
   }
+}
+a.link.cancel {
+  color: #999;
+}
+.picker-item {
+  height: 50px; /*no*/
+  line-height: 50px; /*no*/
+}
+
+.picker-center-highlight {
+  height: 50px; /*no*/
+  margin-top: -25px; /*no*/
 }

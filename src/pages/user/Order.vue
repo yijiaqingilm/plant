@@ -9,7 +9,6 @@
             <div class="order-list">
                 <div class="order-time"><span class="icon_time"></span>下单时间：2017-05-05</div>
                 <div class="order-item">
-                    <div class="item-photo"><img src="../../assets/flower.png" alt=""></div>
                     <div class="item-info">
                     </div>
                 </div>
@@ -21,13 +20,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        data(){
-            return {}
-        },
-    }
+  export default {
+    data () {
+      return {}
+    },
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
     @import "../../css/user/orderBefore.scss";
 </style>

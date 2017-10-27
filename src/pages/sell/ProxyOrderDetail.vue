@@ -6,6 +6,7 @@
             <div class="header">
                 <div class="address-list">
                     <div class="user-info">
+                        <div>用户编号:{{proxyOrder.userId}}</div>
                         <div class="detail">
                             <div class="name">{{addressInfo.contact}}</div>
                             <div class="phone">{{addressInfo.mobile}}</div>
@@ -26,7 +27,7 @@
                                  v-show="index<maxLen" :key="index">
                                 <div class="photo"><img :src="item.img" alt=""></div>
                                 <div class="goods-info">
-                                    <div class="name">{{item.name}} </div>
+                                    <div class="name">{{item.name}}</div>
                                     <div class="detail">
                                         <div class="color-warn">￥{{item.price}}</div>
                                         <div class="count">×{{item.amount}}</div>
@@ -37,12 +38,14 @@
                         </collapsed>
                     </div>
                     <div class="line-10"></div>
-                    <div class="order-info-group onepx" v-if="proxyOrder.coupon && proxyOrder.coupon.id !=''">
+                    <div class="order-info-group onepx coupon min-height" @click="openPicker">
                         <div>优惠券</div>
                         <div class="group-right color-theme">
-                            {{proxyOrder.coupon.name}}
+                            <span v-if="coupon && coupon.id!==void(0) && coupon.id !=''">{{coupon.name}}</span>
+                            <span v-else>请选择优惠券</span><span class="gt"></span>
                         </div>
                     </div>
+                    <input type="hidden" class="coupon">
                     <div class="order-info-group onepx">
                         <div><span>养护时间</span></div>
                         <div class="color-theme text-right">
@@ -59,7 +62,7 @@
                         <div>{{maintainAmount}}</div>
                     </div>
                     <div class="order-info-group ">
-                        <div>租赁租期</div>
+                        <div>养护期限</div>
                         <div>
                             {{showPaymethods}}
                         </div>
@@ -67,8 +70,20 @@
                     <div class="order-info-group">
                         <div>結算方式</div>
                         <div>
-                            {{proxyOrder.payType==payType.monthly?'月结':'一次性付款'}}
+                            {{payTypeToName[proxyOrder.payType].name}}
                         </div>
+                    </div>
+                    <div class="order-info-group">
+                        <div>优惠金额</div>
+                        <div>￥{{discount}}</div>
+                    </div>
+                    <div class="order-info-group" v-if="giveService">
+                        <div>优惠服务</div>
+                        <div>{{giveService}}</div>
+                    </div>
+                    <div class="order-info-group" v-if="giveGoods">
+                        <div>优惠赠品</div>
+                        <div>{{giveGoods}}</div>
                     </div>
                 </div>
             </div>
@@ -88,121 +103,221 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {sellApi} from 'api'
-    import {weekList, goodsType, itemType, payType} from 'lib/common'
-    import {Cache, commonly} from 'lib/utils'
-    import MyPicker from 'components/myPickerModal/myPickerModal.vue'
-    import UserFooter from 'section/user/footer/footer.vue'
-    import Counter from 'components/counter/counter.vue'
-    import TypeSelector from 'components/typeSelector/typeSelector.vue'
-    import Collapsed from 'components/collapsed/collapsed.vue'
+  import { sellApi } from 'api'
+  import { weekList, goodsType, itemType, payType, couponGiveType, payTypeToName } from 'lib/common'
+  import { Cache, commonly } from 'lib/utils'
+  import MyPicker from 'components/myPickerModal/myPickerModal.vue'
+  import UserFooter from 'section/user/footer/footer.vue'
+  import Counter from 'components/counter/counter.vue'
+  import TypeSelector from 'components/typeSelector/typeSelector.vue'
+  import Collapsed from 'components/collapsed/collapsed.vue'
 
-    export default {
-        data() {
-            return {
-                order_id: -1,
-                /*显示的最大条数*/
-                maxLen: 4,
-                orderInfo: null,
-                weekList: weekList,
-                weekName: '',
-                itemType: itemType,
-                proxyOrder: {},
-                payType: payType,
-                addressInfo: {}
-            }
+  export default {
+    data () {
+      return {
+        order_id: -1,
+        /* 显示的最大条数*/
+        maxLen: 4,
+        orderInfo: null,
+        weekList: weekList,
+        weekName: '',
+        itemType: itemType,
+        proxyOrder: {},
+        payTypeToName: payTypeToName,
+        payType: payType,
+        addressInfo: {},
+        couponList: [],
+        coupon: {
+          id: '',
+          discount: 0,
+          name: ''
         },
-        created() {
-            this.proxyOrder = Cache.get('proxyOrder') || {};
-            this.addressInfo = this.proxyOrder.addressInfo;
-            console.log(this.proxyOrder, 'proxyOrder');
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
+        couponPicker: null,
+      }
+    },
+    created () {
+      this.proxyOrder = Cache.get('proxyOrder') || {}
+      this.addressInfo = this.proxyOrder.addressInfo
+      console.log(this.proxyOrder, 'proxyOrder')
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    mounted () {
+      this.$nextTick(() => {
+        var that = this
+        let items = []
+        let {goodsList} = this.proxyOrder
+        goodsList.forEach((item) => items.push(item.id))
+        let step = 500
+        setTimeout(() => {
+          sellApi.couponList(0, items.join(','), this.proxyOrder.payType, this.proxyOrder.paymethods.id).then((result) => {
+            let coupon_input = document.querySelectorAll('.coupon')
+            let couponValues = []
+            let couponDisplayValues = []
+            console.log('result', result)
+            this.couponList = result.data
+            this.couponList.forEach((item) => {
+              couponValues.push(item.id)
+              couponDisplayValues.push(item.name)
             })
-        },
-        mounted() {
-        },
-        methods: {
-            changeShowLen: function (maxLen) {
-                this.maxLen = maxLen;
-            },
-            createOrder() {
-                let items = [];
-                let {coupon, userId, goodsList, paymethods, payType, week, time} = this.proxyOrder;
-                goodsList.forEach(item => {
-                    items.push(item.id);
-                });
-                if (commonly.isEmptyObject(coupon)) {
-                    coupon = '';
-                } else {
-                    coupon = JSON.stringify([{id: coupon.id, type: 0}]);
+            couponValues.push(-1)
+            couponDisplayValues.push('不使用优惠券')
+            var isChange = true
+            this.couponPicker = this.$f7.picker({
+              closeByOutsideClick: false,
+              input: coupon_input[coupon_input.length - 1],
+              values: [that.coupon.id],
+              toolbarTemplate: `<div class="toolbar">
+                                          <div class="toolbar-inner">
+                                            <div class="left"><a href="#" class="link cancel">取消</a></div>
+                                            <div class="center">优惠券选择</div>
+                                            <div class="right">
+                                              <a href="#" class="link close-picker">确定</a>
+                                            </div>
+                                          </div>
+                                       </div> `,
+              cols: [
+                {
+                  textAlign: 'center',
+                  values: couponValues,
+                  displayValues: couponDisplayValues
                 }
-                sellApi.payment({
-                    address_id: this.addressInfo.id,
-                    cartids: items.join(','),
-                    // 0 养护 1 绿植
-                    coupons: coupon,
-                    paymethods: JSON.stringify(paymethods),
-                    paytype: payType,
-                    week: week,
-                    time: JSON.stringify(time),
-                    type:0
-                }, userId).then(result => {
-                    this.$f7.alert('代下单已生成，提示用户去支付<br>可在订单列表查看订单详情', '', () => {
-                        this.$router.load({url: '/sell/myOrder'});
-                    })
+              ],
+              onOpen: (picker) => {
+                isChange = true
+                picker.container.find('.cancel').on('click', () => {
+                  isChange = false
+                  picker.close()
+                })
+              },
+              onClose ({value}) {
+                console.log('关闭', value)
+                if (isChange) {
+                  if (parseInt(value[0], 10) !== -1) {
+                    that.coupon = that.couponList.find((item) => parseInt(item.id, 10) === parseInt(value[0], 10))
+                  } else {
+                    that.coupon = {}
+                  }
 
-                });
+                }
 
-            }
-        },
-        computed: {
-            maintainAmount() {
-                if (commonly.isEmptyObject(this.proxyOrder.goodsList)) {
-                    return '';
-                }
-                let plantType = this.proxyOrder.goodsList.length;
-                let plantCount = 0;
-                this.proxyOrder.goodsList.forEach(item => {
-                    plantCount += item.amount;
-                });
-                return `${plantType}种${plantCount}颗`;
-            },
-            showPaymethods() {
-                //免{{payInfo.paymethods.give}}个月
-                //{{proxyOrder.payType==payType.monthly?'月结':'一次性付款'}}
+              }
+            })
+          })
+        }, step)
 
-                let payMethod = this.proxyOrder.paymethods.name;
-                if (this.proxyOrder.payType == payType.onec) {
-                    payMethod += `免${this.proxyOrder.paymethods.give}个月`
-                }
-                return payMethod;
-            },
-            totalAll() {
-                if (commonly.isEmptyObject(this.proxyOrder.goodsList)) {
-                    return 0;
-                }
-                let {coupon} = this.proxyOrder;
-                let {buylong, give} = this.proxyOrder.paymethods;
-                let moneyCount = (buylong >>> 0);
-                if (this.proxyOrder.payType == payType.onec) {
-                    moneyCount -= (give >>> 0);
-                }
-                return this.proxyOrder.goodsList.map(item => {
-                    return parseFloat(item.amount) * parseFloat(item.price);
-                }).reduce((a, b) => a + b) * moneyCount - coupon.discount;
-            }
-        },
-        components: {
-            Counter, UserFooter, MyPicker, TypeSelector, Collapsed, UserFooter
-        },
+      })
+    },
+    methods: {
+      openPicker () {
+        if (this.couponList.length > 0) {
+          this.couponPicker.open()
+        } else {
+          this.$f7.alert('没有可使用的优惠券', '')
+        }
 
-    }
+      },
+      changeShowLen: function (maxLen) {
+        this.maxLen = maxLen
+      },
+      createOrder () {
+        let items = []
+        let {userId, goodsList, paymethods, payType, week, time} = this.proxyOrder
+        goodsList.forEach((item) => items.push(item.id))
+        let coupon = ''
+        if (commonly.isEmptyObject(this.coupon) || !this.coupon.id) {
+          coupon = ''
+        } else {
+          coupon = JSON.stringify([{id: this.coupon.id, type: 1}])
+        }
+        sellApi.payment({
+          address_id: this.addressInfo.id,
+          cartids: items.join(','),
+          coupons: coupon,
+          paymethods: JSON.stringify(paymethods),
+          paytype: payType,
+          week: week,
+          time: JSON.stringify(time),
+          // 0 养护 1 绿植
+          type: 0
+        }, userId).then((result) => {
+          this.$f7.alert('代下单已生成，提示用户去支付<br>可在订单列表查看订单详情', '', () => {
+            /*eslint no-magic-numbers:0*/
+            Cache.set('orderItem', 2)
+            this.$router.load({url: '/sell/myOrder'})
+          })
+
+        })
+
+      }
+    },
+    computed: {
+      // 优惠金额
+      discount () {
+        if (!this.coupon) {
+          return 0
+        }
+
+        let couponPrice = this.coupon.id ? this.coupon.discount : 0
+        return couponPrice
+      },
+      // 第一次 付款总额 包括 优惠金额
+      totalAll () {
+        if (!this.proxyOrder) {
+          return 0
+        }
+        let total = parseFloat(this.proxyOrder.totalAll) - parseFloat(this.discount)
+
+        return total > 0 ? total : 0.01
+      },
+      maintainAmount () {
+        if (commonly.isEmptyObject(this.proxyOrder.goodsList)) {
+          return ''
+        }
+        let plantType = this.proxyOrder.goodsList.length
+        let plantCount = 0
+        this.proxyOrder.goodsList.forEach((item) => {
+          plantCount += item.amount
+        })
+        return `${plantType}种${plantCount}棵`
+      },
+      showPaymethods () {
+        // 免{{payInfo.paymethods.give}}个月
+        // {{proxyOrder.payType==payType.monthly?'月结':'一次性付款'}}
+
+        let payMethod = this.proxyOrder.paymethods.name
+        if (parseInt(this.proxyOrder.payType, 10) === payType.onec && this.proxyOrder.paymethods.give > 0) {
+          payMethod += `免${this.proxyOrder.paymethods.give}个月`
+        }
+        return payMethod
+      },
+      giveService () {
+        let giveService = ''
+        if (this.coupon.coupon_type === couponGiveType.service) {
+          giveService += this.coupon.num
+        }
+        return giveService
+      },
+      giveGoods () {
+        let giveGoods = ''
+        if (this.coupon.coupon_type === couponGiveType.goods) {
+          giveGoods += this.coupon.item
+        }
+        return giveGoods
+      }
+
+    },
+    components: {
+      Counter, UserFooter, MyPicker, TypeSelector, Collapsed
+    },
+
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/store/store.scss";
+
     @import "../../css/store/pay.scss";
 </style>
 

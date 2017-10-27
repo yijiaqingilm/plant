@@ -71,103 +71,102 @@
     </f7-page>
 </template>
 <script type="text/ecmascript-6">
-    import InfiniteLoading from 'vue-infinite-loading'
-    import {sellApi} from 'api'
-    import Counter from 'components/counter/counter.vue'
-    import MyMap from 'components/myMap/myMap.vue'
-    import {Cache} from 'lib/utils'
+  import InfiniteLoading from 'vue-infinite-loading'
+  import { sellApi } from 'api'
+  import Counter from 'components/counter/counter.vue'
+  import MyMap from 'components/myMap/myMap.vue'
+  import { Cache } from 'lib/utils'
 
-    export default {
-        data() {
-            return {
-                orderList: [],
-                day: 1,
-                orderTime: '',
-                show: false,
-                curOrder: null,
-                curIndex: -1,
-                page: 1,
-                curOrder: {}
-            }
-        },
-        created() {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        mounted() {
-            this.$nextTick(() => {
+  export default {
+    data () {
+      return {
+        orderList: [],
+        day: 1,
+        orderTime: '',
+        show: false,
+        curIndex: -1,
+        page: 1,
+        curOrder: {}
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      reinit () {
+        // reinit
+      },
+      call (mobile) {
+        // call
+      },
+      closeModal () {
+        this.day = 1
+        this.show = false
+      },
+      toPostpone () {
+        sellApi.delay(this.curOrder.id, this.day).then((result) => {
+          console.log('result', result)
+          this.show = false
+          this.day = 1
+          this.orderList = []
+          this.page = 1
+          let step = 100
+          setTimeout(() => {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+          }, step)
 
+        })
+      },
 
-            });
-        },
-        methods: {
-            reinit() {
-            },
-            call(mobile) {
-            },
-            closeModal() {
-                this.day = 1;
-                this.show = false;
-            },
-            toPostpone() {
-                sellApi.delay(this.curOrder.id, this.day).then(result => {
-                    console.log('result', result);
-                    //this.orderList.splice(this.curIndex, 1);
-                    this.show = false;
-                    this.day = 1;
-                    this.orderList = [];
-                    this.page = 1;
-                    this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
-                });
-            },
-
-            getList: function () {
-                sellApi.booking(this.page).then(result => {
-                    if (result.data.length > 0) {
-                        this.orderList = [].concat(this.orderList).concat(result.data);
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded');
-                        this.page++;
-                    } else {
-                        this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete');
-                    }
-                });
-            },
-            finish: function ({id}, index) {
-                this.$f7.confirm("确定已达到目的地并完成了预约上门服务？", "", () => {
-                    sellApi.bookingComplete(id).then(result => {
-                        this.orderList.splice(index, 1);
-                    });
-                })
-            },
-            changeTime: function (order, index) {
-                this.show = true;
-                this.curOrder = order;
-                this.curIndex = index;
-                this.orderTime = order.times;
-            },
-            changeCount: function (increment) {
-                this.day += increment;
-                if (this.day <= 0) {
-                    this.day = 1;
-                }
-                if (this.day >= 3) {
-                    this.day = 3;
-                }
-            },
-            openMap(order) {
-                this.$router.load({url: '/sell/navi'});
-                Cache.set('navi', {dest: `${order.lng},${order.lat}`, destName: order.address})
-                // location.href = `//m.amap.com/navi/?start=116.403124,39.940693&dest=116.481488,39.990464&destName=阜通西&naviBy=car&key=f9c719281e11c1b009601907809f0e19`;
-            }
-        },
-        components: {Counter, InfiniteLoading, MyMap}
-    }
+      getList: function () {
+        sellApi.booking(this.page).then((result) => {
+          if (result.data.length > 0) {
+            this.orderList = [].concat(this.orderList).concat(result.data)
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+            this.page++
+          } else {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+        })
+      },
+      finish: function ({id}, index) {
+        this.$f7.confirm('确定已达到目的地并完成了预约上门服务？', '', () => {
+          sellApi.bookingComplete(id).then((result) => {
+            this.orderList.splice(index, 1)
+          })
+        })
+      },
+      changeTime: function (order, index) {
+        this.show = true
+        this.curOrder = order
+        this.curIndex = index
+        this.orderTime = order.times
+      },
+      changeCount: function (increment) {
+        let maxDay = 3
+        this.day += increment
+        if (this.day <= 0) {
+          this.day = 1
+        }
+        if (this.day >= maxDay) {
+          this.day = maxDay
+        }
+      },
+      openMap (order) {
+        this.$router.load({url: '/sell/navi'})
+        Cache.set('navi', {dest: `${order.lng},${order.lat}`, destName: order.address})
+        // location.href = `//m.amap.com/navi/?start=116.403124,39.940693&dest=116.481488,39.990464&destName=阜通西&naviBy=car&key=f9c719281e11c1b009601907809f0e19`;
+      }
+    },
+    components: {Counter, InfiniteLoading, MyMap}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/orderList.scss";
 
     .orderList .list .item .main {

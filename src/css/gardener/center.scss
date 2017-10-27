@@ -27,6 +27,7 @@
 
         padding: 20px 0;
         .icon {
+          position: relative;
           width: 60px; /*no*/
           height: 60px; /*no*/
           margin: 0 auto;
@@ -45,4 +46,19 @@
       }
     }
   }
+}
+
+.book-count {
+  position: absolute;
+  top: -2px; /*no*/
+  right: -20px; /*no*/
+  width: 22px; /*no*/
+  height: 22px; /*no*/
+  line-height: 22px; /*no*/
+  border-radius: 100%;
+  transform: translate(-50%, 10%);
+  background-color: #EC6976;
+  text-align: center;
+  color: #ffffff;
+  @include setFontSize($miniFontSize);
 }

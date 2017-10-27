@@ -12,8 +12,7 @@
                 <f7-navbar title="" :back-link="false" sliding></f7-navbar>
                 <!-- Pages -->
                 <f7-pages>
-                        <f7-page >
-                        </f7-page>
+                    <f7-page>&nbsp;</f7-page>
                 </f7-pages>
             </f7-view>
         </f7-views>
@@ -21,27 +20,24 @@
 </template>
 
 <script>
-    import Back from 'components/back/back.vue'
-    import {commonApi} from 'api'
-    import Loading from 'components/loading/loading.vue';
+  import Back from 'components/back/back.vue'
+  import { commonApi } from 'api'
+  import Loading from 'components/loading/loading.vue'
 
-    import {commonly, LocalCache} from 'lib/utils'
+  import { commonly, LocalCache } from 'lib/utils'
 
-    export default {
-        created: function () {
-            window.f7 = this.$f7;
+  export default {
+    created: function () {
+      window.f7 = this.$f7
 
-        },
-        methods: {
-            reinit(){
-
-                //window.history.back();
-            }
-        },
-        mounted(){
-        },
-        components: {Loading, Back}
-    }
+    },
+    methods: {
+      reinit () {
+        // window.history.back();
+      }
+    },
+    components: {Loading, Back}
+  }
 </script>
 <style lang="scss" type="text/css">
     @import "css/global.scss";

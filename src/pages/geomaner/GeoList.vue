@@ -44,15 +44,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {commonApi} from 'api'
-    export default {
-        data(){
-            return {}
-        },
-        created(){
-        },
-        methods: {},
-    }
+  import { commonApi } from 'api'
+
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      // created
+    },
+    methods: {},
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "../../css/geomaner/geomaner.scss";

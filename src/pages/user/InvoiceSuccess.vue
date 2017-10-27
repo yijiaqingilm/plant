@@ -17,30 +17,31 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import myMsg from 'components/myMsg/myMsg.vue';
-    export default {
-        data(){
-            return {}
-        },
-        created(){
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        components: {
-            myMsg
-        },
-        methods: {
-            goHome(){
-                this.$router.load({url: '/user/invoice/list'});
-            }
-        },
-    }
+  import myMsg from 'components/myMsg/myMsg.vue'
+
+  export default {
+    data () {
+      return {}
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    components: {
+      myMsg
+    },
+    methods: {
+      goHome () {
+        this.$router.load({url: '/user/invoice/list'})
+      }
+    },
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
     @import "../../css/user/invoiceSuccess.scss";
 </style>
 

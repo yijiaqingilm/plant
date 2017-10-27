@@ -1,7 +1,8 @@
-@import "../../css/global.scss";
+@import "../../css/globalFunc";
 
 .amount {
-  display: table;
+  display: inline-block;
+  font-size: 0;
   border-radius: 8px;
   border: 1px solid #aaaaaa; /*no*/
   &.amount-max {
@@ -22,7 +23,7 @@
     }
   }
   .counter-button {
-    display: table-cell;
+    display: inline-block;
     @include setFontSize($middleFontSize);
     text-align: center;
     width: 55px;

@@ -85,107 +85,108 @@
         <div class="submit">
             <div class="my-button" @click="submit()">提交申请</div>
         </div>
-        <my-frame-map v-if="load"  ref="myMap" :location="user.location" @getAddressInfo="getAddressInfo"></my-frame-map>
+        <my-frame-map v-if="load" ref="myMap" :location="user.location" @getAddressInfo="getAddressInfo"></my-frame-map>
     </f7-page>
 </template>
 
 <script type="text/ecmascript-6">
-    import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
-    import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
-    import {sellApi} from 'api'
-    import {Validator} from 'lib/custom_validator';
-    export default {
-        data(){
-            return {
-                user: {
-                    name: '',
-                    // 性别1男，2女 ,
-                    sex: '1',
-                    mobile: '',
-                    address: '',
-                    state: '',
-                    city: '',
-                    district: '',
-                    addressdetail: '',
-                    avatar: '',
-                    location: '',
-                    lng: '',
-                    lat: '',
-                    street: '',
-                    identity: ''
-                },
-                errors: null,
-                validator: null,
-                load: false
-            }
+  import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
+  import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
+  import { sellApi } from 'api'
+  import { Validator } from 'lib/custom_validator'
+
+  export default {
+    data () {
+      return {
+        user: {
+          name: '',
+          // 性别1男，2女 ,
+          sex: '1',
+          mobile: '',
+          address: '',
+          state: '',
+          city: '',
+          district: '',
+          addressdetail: '',
+          avatar: '',
+          location: '',
+          lng: '',
+          lat: '',
+          street: '',
+          identity: ''
         },
-        created: function () {
-            this.validator = new Validator({
-                name: 'required',
-                identity: 'required',
-                mobile: 'required|mobile',
-                address: 'required',
-            });
-            this.$set(this, 'errors', this.validator.errorBag);
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            init() {
-                /*延迟加载地图资源 */
-                setTimeout(() => {
-                    this.load = true;
-                }, 500);
+        errors: null,
+        validator: null,
+        load: false
+      }
+    },
+    created: function () {
+      this.validator = new Validator({
+        name: 'required',
+        identity: 'required',
+        mobile: 'required|mobile',
+        address: 'required',
+      })
+      this.$set(this, 'errors', this.validator.errorBag)
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      init () {
+        let step = 500
+        /* 延迟加载地图资源 */
+        setTimeout(() => {
+          this.load = true
+        }, step)
 
-            },
-            showMap() {
-                this.$refs.myMap.showFrameMap();
-            },
-            submit () {
-                this.validator.validateAll({
-                    name: this.user.name,
-                    identity: this.user.identity,
-                    mobile: this.user.mobile,
-                    address: this.user.address,
-                })
-                console.log(this.errors);
+      },
+      showMap () {
+        this.$refs.myMap.showFrameMap()
+      },
+      submit () {
+        this.validator.validateAll({
+          name: this.user.name,
+          identity: this.user.identity,
+          mobile: this.user.mobile,
+          address: this.user.address,
+        })
+        console.log(this.errors)
 
-                //  校验信息
-                if (this.errors.errors.length > 0) {
-                    this.$f7.alert(this.errors.errors[0].msg);
-                    return;
-                }
-                //接口需要更改。
-                sellApi.apply(this.user).then(data => {
-                    console.log(data);
-                    this.$router.load({url: '/sell/applyAfter'})
-                }).catch(err => {
-                    console.log(err)
-                });
-            },
-            getAddressInfo(address) {
-                console.log(address);
-                this.$refs.myMap.hideFrameMap();
-                this.user.city = address.city;
-                this.user.state = address.province;
-                this.user.district = address.district;
-                this.user.location = address.location;
-                this.user.lng = address.location.split(',')[0];
-                this.user.lat = address.location.split(',')[1];
-                this.user.address = address.name;
+        //  校验信息
+        if (this.errors.errors.length > 0) {
+          this.$f7.alert(this.errors.errors[0].msg)
+          return
+        }
+        sellApi.apply(this.user).then((data) => {
+          this.$router.load({url: '/sell/applyAfter'})
+        }).catch((err) => {
+          console.log(err)
+        })
 
-            },
-            getBlob(blob){
-                this.user.avatar = blob;
-            }
-        }, components: {MyImageUpload, MyFrameMap}
-    }
+      },
+      getAddressInfo (address) {
+        console.log(address)
+        this.$refs.myMap.hideFrameMap()
+        this.user.city = address.city
+        this.user.state = address.province
+        this.user.district = address.district
+        this.user.location = address.location
+        this.user.lng = address.location.split(',')[0]
+        this.user.lat = address.location.split(',')[1]
+        this.user.address = address.name
+
+      },
+      getBlob (blob) {
+        this.user.avatar = blob
+      }
+    }, components: {MyImageUpload, MyFrameMap}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/apply.scss";
 </style>
 

@@ -61,129 +61,129 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {Validator} from 'lib/custom_validator';
-    import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
-    import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
-    import {sellApi} from "api"
+  import { Validator } from 'lib/custom_validator'
+  import MyFrameMap from 'components/myFrameMap/myFrameMap.vue'
+  import MyImageUpload from 'components/myImageUpload/myImageUpload.vue'
+  import { sellApi } from 'api'
 
-    export default {
-        data() {
-            return {
-                default_img: require('../../assets/icon_firm.png'),
-                crmInfo: {
-                    address: '',
-                    state: '',
-                    lng: '',
-                    lat: '',
-                    addressdetail: '',
-                    album: '',
-                    remark: '',
-                    contact: '',
-                    mobile: '',
-                    customer_id: '',
-                },
-                loadMap: false,
-                errors: null,
-                validator: null,
-                localIds: '',
-                serverId: ''
-            }
+  let defaultImg = require('../../assets/icon_firm.png')
+  export default {
+    data () {
+      return {
+        default_img: defaultImg,
+        crmInfo: {
+          address: '',
+          state: '',
+          lng: '',
+          lat: '',
+          addressdetail: '',
+          album: '',
+          remark: '',
+          contact: '',
+          mobile: '',
+          customer_id: '',
         },
-        created() {
-            this.validator = new Validator({
-                company: 'required',
-                address: 'required',
-                addressdetail: 'required'
+        loadMap: false,
+        errors: null,
+        validator: null,
+        localIds: '',
+        serverId: ''
+      }
+    },
+    created () {
+      this.validator = new Validator({
+        company: 'required',
+        address: 'required',
+        addressdetail: 'required'
 
-            });
-            this.$set(this, 'errors', this.validator.errorBag);
-        },
-        methods: {
-            init() {
-                /*延迟加载地图资源 */
-                setTimeout(() => {
-                    this.loadMap = true;
-                }, 500);
-            },
-            chooseImage() {
-                let that = this;
-                wx.chooseImage({
-                    count: 1, // 默认9
-                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-                    success: function (res) {
-                        that.localIds = res.localIds[0]; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                        that.default_img = res.localIds[0];
-                        setTimeout(() => {
-                            wx.uploadImage({
-                                localId: res.localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
-                                isShowProgressTips: 1, // 默认为1，显示进度提示
-                                success: function (res) {
-                                    that.serverId = res.serverId; // 返回图片的服务器端ID
-                                    that.crmInfo.album = res.serverId;
-                                }, fail: function (res) {
-                                    that.$f7.alert(JSON.stringify(res));
-                                }
-
-                            });
-                        }, 100);
-
-                    }
-                });
-            },
-            submit() {
-                this.validator.validateAll({
-                    company: this.crmInfo.company,
-                    address: this.crmInfo.address,
-                    addressdetail: this.crmInfo.addressdetail,
-                })
-
-                //  校验信息
-                if (this.errors.errors.length > 0) {
-                    this.$f7.alert(this.errors.errors[0].msg);
-                    return;
+      })
+      this.$set(this, 'errors', this.validator.errorBag)
+    },
+    methods: {
+      init () {
+        let step = 500
+        /* 延迟加载地图资源 */
+        setTimeout(() => {
+          this.loadMap = true
+        }, step)
+      },
+      chooseImage () {
+        let that = this
+        window.wx.chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: function (res) {
+            that.localIds = res.localIds[0] // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            that.default_img = res.localIds[0]
+            let step = 100
+            setTimeout(() => {
+              window.wx.uploadImage({
+                localId: res.localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                  that.serverId = res.serverId // 返回图片的服务器端ID
+                  that.crmInfo.album = res.serverId
+                }, fail: function (res) {
+                  that.$f7.alert(JSON.stringify(res))
                 }
-                sellApi.addClient(this.crmInfo).then(data => {
-                    console.log(data, 'data');
-                    this.$f7.alert(data.result, '', () => {
-                        // this.$router.load({url: '/sell/client/list'});
-                        this.crmInfo = {
-                            address: '',
-                            state: '',
-                            lng: '',
-                            lat: '',
-                            addressdetail: '',
-                            album: '',
-                            remark: '',
-                            contact: '',
-                            mobile: '',
-                            customer_id: ''
-                        };
-                        this.default_img = require('../../assets/icon_firm.png');
-                    })
 
-                }).catch(err => {
-                    console.log(err)
-                });
-            },
-            show: function () {
-                //alert('show' + this.showMap);
-                //this.showMap = true;
-                this.$refs.myMap.showFrameMap();
-            },
-            getInfo: function (address) {
-                this.$refs.myMap.hideFrameMap();
-                console.log(address);
-                Object.assign(this.crmInfo, address);
-                this.crmInfo.address = address.district + address.street + address.name;
-                this.crmInfo.state = address.province;
-                this.crmInfo.lng = address.location.split(',')[0];
-                this.crmInfo.lat = address.location.split(',')[1];
+              })
+            }, step)
+
+          }
+        })
+      },
+      submit () {
+        this.validator.validateAll({
+          company: this.crmInfo.company,
+          address: this.crmInfo.address,
+          addressdetail: this.crmInfo.addressdetail,
+        })
+
+        //  校验信息
+        if (this.errors.errors.length > 0) {
+          this.$f7.alert(this.errors.errors[0].msg)
+          return
+        }
+        sellApi.addClient(this.crmInfo).then((data) => {
+          this.$f7.alert(data.result, '', () => {
+            // this.$router.load({url: '/sell/client/list'});
+            this.crmInfo = {
+              address: '',
+              state: '',
+              lng: '',
+              lat: '',
+              addressdetail: '',
+              album: '',
+              remark: '',
+              contact: '',
+              mobile: '',
+              customer_id: ''
             }
-        },
-        computed: {},
-        components: {MyFrameMap, MyImageUpload}
-    }
+            this.default_img = defaultImg
+          })
+
+        }).catch((err) => {
+          console.log(err)
+        })
+      },
+      show: function () {
+        this.$refs.myMap.showFrameMap()
+      },
+      getInfo: function (address) {
+        this.$refs.myMap.hideFrameMap()
+        console.log(address)
+        Object.assign(this.crmInfo, address)
+        this.crmInfo.address = address.district + address.street + address.name
+        this.crmInfo.state = address.province
+        this.crmInfo.lng = address.location.split(',')[0]
+        this.crmInfo.lat = address.location.split(',')[1]
+      }
+    },
+    computed: {},
+    components: {MyFrameMap, MyImageUpload}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "../../css/sell/crm.scss";

@@ -6,14 +6,14 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        props: {
-            itemList: Array
-        },
-        data(){
-            return {}
-        }
+  export default {
+    props: {
+      itemList: Array
+    },
+    data () {
+      return {}
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "footer.scss";

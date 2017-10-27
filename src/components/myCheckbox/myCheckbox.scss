@@ -1,4 +1,4 @@
-@import "../../css/global.scss";
+@import "../../css/globalFunc";
 
 .my-checkbox {
   position: relative;
@@ -32,6 +32,11 @@
     border: 1px solid $theme_color; /*no*/
     border-radius: 100%;
 
+  }
+  input:disabled + label {
+    background: url("icon_select_disable.png");
+    background-size: 17px 17px; /*no*/
+    border: 0;
   }
   input:checked + label {
     background: url("icon_select_on.png");

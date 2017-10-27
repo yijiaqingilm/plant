@@ -14,30 +14,27 @@
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        props: {
-            show: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data(){
-            return {}
-        },
-        created(){
-        },
-        methods: {
-            showModal: function () {
-                this.show = true;
-            },
-            closeModal: function () {
-                //this.show = false;
-                this.$emit('closeModal',false);
-            }
-        },
-        computed: {}
+  export default {
+    props: {
+      show: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data () {
+      return {}
+    },
+    methods: {
+      showModal: function () {
+        this.show = true
+      },
+      closeModal: function () {
+        this.$emit('closeModal', false)
+      }
+    },
+    computed: {}
 
-    }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
     @import "myPickerModal.scss";

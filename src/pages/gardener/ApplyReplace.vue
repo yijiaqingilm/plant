@@ -41,108 +41,105 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import wx from 'wx';
-    import {gardenerApi} from 'api'
-    import {common} from 'lib/common'
+  import wx from 'wx'
+  import { gardenerApi } from 'api'
+  import { common } from 'lib/common'
 
-    export default {
-        data() {
-            return {
-                showCode: true,
-                plantInfo: {},
-                isPhoto: false,
-                localIds: '',
-                serverId: ''
-            }
-        },
-        created() {
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            imageLoad() {
-
-            },
-            chooseImage() {
-                let that = this;
-                wx.chooseImage({
-                    count: 1, // 默认9
-                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                    sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
-                    success: function (res) {
-                        that.localIds = res.localIds[0]; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                        that.isPhoto = true;
-                        setTimeout(() => {
-                            wx.uploadImage({
-                                localId: res.localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
-                                isShowProgressTips: 1, // 默认为1，显示进度提示
-                                success: function (res) {
-                                    that.serverId = res.serverId; // 返回图片的服务器端ID
-                                    console.log(res, 'serverId');
-                                }, fail: function (res) {
-                                    that.$f7.alert(JSON.stringify(res));
-                                }
-
-                            });
-                        }, 100);
-
-                    }
-                });
-            },
-            applyReplace() {
-                if (this.plantInfo.shopper_item_detail_id === void(0) || this.plantInfo.shopper_item_detail_id == '') {
-                    this.$f7.alert('扫一扫获取需要更换的绿植');
-                    return;
+  export default {
+    data () {
+      return {
+        showCode: true,
+        plantInfo: {},
+        isPhoto: false,
+        localIds: '',
+        serverId: ''
+      }
+    },
+    created () {
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      chooseImage () {
+        let that = this
+        wx.chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: function (res) {
+            that.localIds = res.localIds[0] // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            that.isPhoto = true
+            let step = 100
+            setTimeout(() => {
+              wx.uploadImage({
+                localId: res.localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                  that.serverId = res.serverId // 返回图片的服务器端ID
+                  console.log(res, 'serverId')
+                }, fail: function (res) {
+                  that.$f7.alert(JSON.stringify(res))
                 }
-                if (this.serverId == '') {
-                    this.$f7.alert('点击拍照上传需更换绿植的状况图');
-                    return;
-                }
-                gardenerApi.replacePlant(this.serverId, this.plantInfo.shopper_item_detail_id).then(result => {
-                    this.$f7.alert('您已提交申请更换绿植<br>请等待后台审核批准', '', () => {
-                        this.showCode = true;
-                        this.plantInfo = {};
-                        this.isPhoto = false;
-                        this.localIds = '';
-                        this.serverId = '';
-                        this.$router.back();
-                    });
 
-                });
-            },
-            /**
-             * 扫一扫 获得二维码
-             */
-            getCode() {
-                var that = this;
-                //扫一扫功能
-                wx.scanQRCode({
-                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-                    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-                    success: function (res) {
-                        var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                        //扫完 回调 得到二维码
-                        gardenerApi.getPlantInfo(result.split('#')[1]).then(result => {
-                            if (result.data.length <= 0) {
-                                that.$f7.alert('扫码错误');
-                            } else {
-                                that.plantInfo = result.data;
-                                that.showCode = false;
+              })
+            }, step)
 
-                            }
-                        });
-                    }
-                });
-
-            }
+          }
+        })
+      },
+      applyReplace () {
+        if (this.plantInfo.shopper_item_detail_id === undefined || this.plantInfo.shopper_item_detail_id === '') {
+          this.$f7.alert('扫一扫获取需要更换的绿植')
+          return
         }
+        if (this.serverId === '') {
+          this.$f7.alert('点击拍照上传需更换绿植的状况图')
+          return
+        }
+        gardenerApi.replacePlant(this.serverId, this.plantInfo.shopper_item_detail_id).then((result) => {
+          this.$f7.alert('您已提交申请更换绿植<br>请等待后台审核批准', '', () => {
+            this.showCode = true
+            this.plantInfo = {}
+            this.isPhoto = false
+            this.localIds = ''
+            this.serverId = ''
+            this.$router.back()
+          })
+
+        })
+      },
+      /**
+       * 扫一扫 获得二维码
+       */
+      getCode () {
+        var that = this
+        // 扫一扫功能
+        wx.scanQRCode({
+          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+          success: function (res) {
+            var result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+            // 扫完 回调 得到二维码
+            gardenerApi.getPlantInfo(result.split('#')[1]).then((result) => {
+              if (result.data.length <= 0) {
+                that.$f7.alert('扫码错误')
+              } else {
+                that.plantInfo = result.data
+                that.showCode = false
+
+              }
+            })
+          }
+        })
+
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
     @import "../../css/gardener/applyReplace.scss";
 </style>
 

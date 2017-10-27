@@ -53,55 +53,53 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {compose, reduce, map, prop} from 'ramda'
-    import {gardenerApi} from 'api'
-    import {getTimer, Cache} from 'lib/utils'
+  import { gardenerApi } from 'api'
+  import { getTimer, Cache } from 'lib/utils'
 
-    export default {
-        data() {
-            return {
-                items: [],
-                company: {},
-                totalTime: 0,
-                usetotalTime: 0
-            }
-        },
-        created() {
-            this.shopper_id = this.$route.params.shopperId;
-            this.order_id = this.$route.params.order_id;
-            gardenerApi.maintenanceDetail(this.shopper_id, this.order_id, true).then(({data}) => {
-                console.log(data)
-                if (data != null) {
-                    this.items = data.items;
-                    this.company = data.company;
-                    this.totalTime = data.totaltime;
-                    this.usetotalTime = data.usetotaltime;
-                }
-
-            });
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        methods: {
-            setTime(time, amount) {
-                return getTimer(time * amount);
-            }
-        },
-        computed: {
-            settotalTime() {
-                return getTimer(this.totalTime);
-            },
-            setUsetotalTime() {
-                return getTimer(this.usetotalTime);
-            }
+  export default {
+    data () {
+      return {
+        items: [],
+        company: {},
+        totalTime: 0,
+        usetotalTime: 0
+      }
+    },
+    created () {
+      this.shopper_id = this.$route.params.shopperId
+      this.order_id = this.$route.params.order_id
+      gardenerApi.maintenanceDetail(this.shopper_id, this.order_id, true).then(({data}) => {
+        if (data !== null) {
+          this.items = data.items
+          this.company = data.company
+          this.totalTime = data.totaltime
+          this.usetotalTime = data.usetotaltime
         }
+
+      })
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    methods: {
+      setTime (time, amount) {
+        return getTimer(time * amount)
+      }
+    },
+    computed: {
+      settotalTime () {
+        return getTimer(this.totalTime)
+      },
+      setUsetotalTime () {
+        return getTimer(this.usetotalTime)
+      }
     }
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/detail.scss";
 </style>
 

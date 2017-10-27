@@ -26,80 +26,15 @@
           @include setFontSize($middleFontSize);
         }
       }
+      .goods-msg {
+        padding: 5px 35px;
+        @include setFontSize($miniFontSize);
+        color: $warn_color;
+      }
       .goods-detail {
         padding: 0 35px 20px 35px;
         color: $gray_color;
         @include setFontSize($miniFontSize);
-      }
-      .group {
-        width: 100%;
-        display: flex;
-        padding: 0 35px 0 35px;
-        align-items: baseline;
-        .group-label {
-          color: #666666;
-          flex: 0 0 150px;
-          width: 150px;
-          img{
-            width: auto;
-          }
-        }
-        .group-item {
-          flex: 1;
-          display: flex;
-          width: 100%;
-          align-items: center;
-          &.brief{
-            padding: 0;
-            color: #666;
-            @include setFontSize($baseFontSize);
-          }
-        }
-      }
-      .combo-list {
-        position: relative;
-        width: 100%;
-        /*height: 80px;*/
-        padding: 20px 35px;
-        color: #666666;
-        &:after {
-          @include onepx;
-        }
-        .combo-item {
-          position: relative;
-          width: 140px;
-          .img {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-top: 120%;
-            img {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              border-radius: 6px;
-            }
-          }
-          .remark {
-            width: 100%;
-            padding-left: 10px;
-            margin-top: 20px;
-            >div{
-              @include setFontSize($miniFontSize);
-              @include ellipsis;
-            }
-          }
-          > div {
-            padding-bottom: 2px;
-            @include ellipsis;
-            &:last-child {
-              padding-bottom: 0;
-            }
-          }
-
-        }
       }
     }
     .brief {
@@ -115,58 +50,155 @@
     }
 
   }
-  @at-root .footer {
-    width: 100%;
-    height: 50px; /*no*/
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    text-align: center;
-    color: #ffffff;
-    @include setFontSize($middleFontSize);
-    > div {
-      .unit {
-
-      }
-      &:first-child {
-        flex: 0 0 50%;
-        width: 50%;
-        display: flex;
-        background: #d9b524;
-        justify-content: center;
-        align-items: center;
-        @include setFontSize($baseFontSize);
-
-      }
-      &:last-child {
-        flex:1;
-        line-height: 50px; /*no*/
-        background: $theme_color;
-      }
-      @include setFontSize($baseFontSize);
-    }
-
-  }
-  @at-root .combo-footer {
-    @extend .footer;
-    .footer-buy {
-      background: $theme_color;
-    }
-
-    .footer-lease {
-      background: #d9b524;
-    }
-
-    > div {
-      &:first-child {
-        background: #FFFFFF;
-        color: $warn_color;
-        border-top: 1px solid #c8c7cc; /*no*/
-      }
-    }
-  }
   img {
     width: 100%;
+  }
+}
+
+.footer {
+  width: 100%;
+  height: 50px; /*no*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  text-align: center;
+  color: #ffffff;
+  @include setFontSize($middleFontSize);
+  > div {
+    .unit {
+
+    }
+    &:first-child {
+      flex: 0 0 50%;
+      width: 50%;
+      display: flex;
+      background: #d9b524;
+      justify-content: center;
+      align-items: center;
+      @include setFontSize($baseFontSize);
+
+    }
+    &:last-child {
+      flex: 1;
+      line-height: 50px; /*no*/
+      background: $theme_color;
+    }
+    @include setFontSize($baseFontSize);
+  }
+
+}
+
+.combo-footer {
+  @extend .footer;
+  .footer-buy {
+    background: $theme_color;
+  }
+
+  .footer-lease {
+    background: #d9b524;
+  }
+
+  > div {
+    &:first-child {
+      background: #FFFFFF;
+      color: $warn_color;
+      border-top: 1px solid #c8c7cc; /*no*/
+    }
+  }
+}
+
+.group {
+  width: 100%;
+  display: flex;
+  padding: 0 35px 0 35px;
+  align-items: baseline;
+  .group-label {
+    color: #666666;
+    flex: 0 0 200px;
+    width: 200px;
+    img {
+      width: auto;
+    }
+  }
+  .group-item {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    &.brief {
+      padding: 0;
+      color: #666;
+      @include setFontSize($baseFontSize);
+    }
+  }
+}
+
+.combo-list {
+  position: relative;
+  width: 100%;
+  /*height: 80px;*/
+  padding: 20px 35px;
+  color: #666666;
+  &:after {
+    @include onepx;
+  }
+  .combo-item {
+    position: relative;
+    width: 140px;
+    .img {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-top: 120%;
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+      }
+    }
+    .remark {
+      width: 100%;
+      padding-left: 10px;
+      margin-top: 20px;
+      > div {
+        @include setFontSize($miniFontSize);
+        @include ellipsis;
+      }
+    }
+    > div {
+      padding-bottom: 2px;
+      @include ellipsis;
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+
+  }
+}
+
+.g-rule {
+  padding: 15px 35px;
+  background: #f9f9f9;
+}
+
+.g-desc {
+  padding: 0 35px;
+}
+
+.rate {
+  appearance: none;
+  background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;
+  padding-right: 14px; /*no*/
+  color: $theme_color;
+  text-align: center;
+  border-radius: 15px;
+  padding: 15px 20px;
+  option {
+    color: $gray_color;
+
   }
 }

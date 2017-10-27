@@ -82,47 +82,48 @@
     </f7-page>
 </template>
 <script type="text/ecmascript-6">
-    import {gardenerApi} from 'api'
-    /*import VuePullRefresh from 'components/pullRefresh/vue-pull-refresh.vue';*/
-    import Counter from 'components/counter/counter.vue'
-    import MyMap from 'components/myMap/myMap.vue'
-    import {getTimer} from 'lib/utils'
+  import { gardenerApi } from 'api'
+  /* import VuePullRefresh from 'components/pullRefresh/vue-pull-refresh.vue';*/
+  import Counter from 'components/counter/counter.vue'
+  import MyMap from 'components/myMap/myMap.vue'
+  import { getTimer } from 'lib/utils'
 
-    export default {
-        data() {
-            return {
-                orderList: [],
-                day: 1,
-                show: false,
-                curOrder: null,
-                curIndex: -1,
-                hour: 1,
-                hourPicker: null
-            }
-        },
-        created() {
-            this.getList();
-            window.wx.ready(() => {
-                wx.hideMenuItems({
-                    menuList: ["menuItem:share:QZone", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:appMessage", "menuItem:share:timeline"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                });
-            })
-        },
-        mounted() {
-            this.$nextTick(() => {
-                let that = this;
-                let hour_input = document.querySelectorAll('.hour');
-                let hourValues = [];
-                let hourDisplayValues = [];
-                for (let i = 1; i <= 8; i++) {
-                    hourValues.push(i);
-                    hourDisplayValues.push(i + '小时');
-                }
-                this.hourPicker = this.$f7.picker({
-                    closeByOutsideClick: false,
-                    input: hour_input[hour_input.length - 1],
-                    values: [that.hour],
-                    toolbarTemplate: `<div class="toolbar">
+  export default {
+    data () {
+      return {
+        orderList: [],
+        day: 1,
+        show: false,
+        curOrder: null,
+        curIndex: -1,
+        hour: 1,
+        hourPicker: null
+      }
+    },
+    created () {
+      this.getList()
+      window.wx.ready(() => {
+        window.wx.hideMenuItems({
+          menuList: ['menuItem:share:QZone', 'menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:appMessage', 'menuItem:share:timeline'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        })
+      })
+    },
+    mounted () {
+      this.$nextTick(() => {
+        let that = this
+        let hour_input = document.querySelectorAll('.hour')
+        let hourValues = []
+        let hourDisplayValues = []
+        let maxTime = 8
+        for (let i = 1; i <= maxTime; i++) {
+          hourValues.push(i)
+          hourDisplayValues.push(i + '小时')
+        }
+        this.hourPicker = this.$f7.picker({
+          closeByOutsideClick: false,
+          input: hour_input[hour_input.length - 1],
+          values: [that.hour],
+          toolbarTemplate: `<div class="toolbar">
                                           <div class="toolbar-inner">
                                             <div class="left"></div>
                                             <div class="center">请选择养护工作时间</div>
@@ -131,116 +132,105 @@
                                             </div>
                                           </div>
                                        </div> `,
-                    cols: [
-                        {
-                            values: hourValues,
-                            displayValues: hourDisplayValues
-                        }
-                    ], onClose({value}) {
-                        that.hour = value[0];
-                        that.$refs.myMap.getCurrentPosition().then(result => {
-                            let position = result.position;
-                            gardenerApi.maintenanceList({
-                                act: 'more',
-                                lng: position.getLng(),
-                                lat: position.getLat(),
-                                hour: that.hour,
-                            }).then(response => {
-                                that.orderList = response.data;
-                            });
-                        });
-                    }
-                });
-            });
-        },
-        methods: {
-            getTimer: getTimer,
-            reinit() {
-                this.getList();
-            },
-            //获取更多的任务
-            getMoreTask() {
-                if (this.orderList.length > 0) {
-                    this.$f7.alert('请完成当日任务，才能获取更多<br>养护信息', '', () => {
-                    });
-                    return;
-                }
-                this.hourPicker.open();
-            },
-            //收工
-            knockOff() {
-                if (this.orderList.length === 0) {
-                    return;
-                }
-                this.$f7.confirm('是否确定收工', '', () => {
-                    gardenerApi.knockOff().then(result => {
-                        //回调
-                        this.orderList = [];
-                    });
-                });
-
-
-            },
-            call(mobile) {
-            },
-            closeModal() {
-                this.day = 1;
-                this.show = false;
-            },
-            toPostpone() {
-                gardenerApi.delay(this.curOrder.order_id, this.day).then(result => {
-                    console.log('result', result);
-                    this.orderList.splice(this.curIndex, 1);
-                    this.show = false;
-                    this.day = 1;
-                });
-            },
-
-            getList: function () {
-                gardenerApi.maintenanceList().then(response => {
-                    this.orderList = response.data;
-                });
-            },
-            keep: function ({shopper_period_id, shopper_id, order_id}) {
-                this.$f7.confirm("确定养护？", "", () => {
-                    gardenerApi.hasUnfinishedOrder(order_id).then(result => {
-                        this.$router.load({url: `/gardener/clockIn/${shopper_id}/${shopper_period_id}/${order_id}`});
-                    });
-                })
-            },
-            postpone: function (order, index) {
-                this.show = true;
-                this.curOrder = order;
-                this.curIndex = index;
-            },
-            changeCount: function (increment) {
-                this.day += increment;
-                if (this.day <= 0) {
-                    this.day = 1;
-                }
-                if (this.day >= 3) {
-                    this.day = 3;
-                }
-            },
-            /* onRefresh: function () {
-             return new Promise((resolve, reject) => {
-             //延迟1s显示数据
-             setTimeout(() => {
-             resolve();
-             this.getList();
-             }, 1000);
-             });
-             console.log('下拉')
-             },*/
-            showDetail: function (order) {
-                this.$router.load({url: `/gardener/detail/${order.shopper_id}/${order.order_id}`});
+          cols: [
+            {
+              values: hourValues,
+              displayValues: hourDisplayValues
             }
-        },
-        components: {Counter, MyMap}
-    }
+          ], onClose ({value}) {
+            that.hour = value[0]
+            that.$refs.myMap.getCurrentPosition().then((result) => {
+              let position = result.position
+              gardenerApi.maintenanceList({
+                act: 'more',
+                lng: position.getLng(),
+                lat: position.getLat(),
+                hour: that.hour,
+              }).then((response) => {
+                that.orderList = response.data
+              })
+            })
+          }
+        })
+      })
+    },
+    methods: {
+      getTimer: getTimer,
+      reinit () {
+        this.getList()
+      },
+      // 获取更多的任务
+      getMoreTask () {
+        if (this.orderList.length > 0) {
+          this.$f7.alert('请完成当日任务，才能获取更多<br>养护信息', '')
+          return
+        }
+        this.hourPicker.open()
+      },
+      // 收工
+      knockOff () {
+        if (this.orderList.length === 0) {
+          return
+        }
+        this.$f7.confirm('是否确定收工', '', () => {
+          gardenerApi.knockOff().then((result) => {
+            // 回调
+            this.orderList = []
+          })
+        })
+
+      },
+      call (mobile) {
+        // call
+      },
+      closeModal () {
+        this.day = 1
+        this.show = false
+      },
+      toPostpone () {
+        gardenerApi.delay(this.curOrder.order_id, this.day).then((result) => {
+          this.orderList.splice(this.curIndex, 1)
+          this.show = false
+          this.day = 1
+        })
+      },
+
+      getList: function () {
+        gardenerApi.maintenanceList().then((response) => {
+          this.orderList = response.data
+        })
+      },
+      keep: function ({shopper_period_id, shopper_id, order_id}) {
+        this.$f7.confirm('确定养护？', '', () => {
+          gardenerApi.hasUnfinishedOrder(order_id).then((result) => {
+            this.$router.load({url: `/gardener/clockIn/${shopper_id}/${shopper_period_id}/${order_id}`})
+          })
+        })
+      },
+      postpone: function (order, index) {
+        this.show = true
+        this.curOrder = order
+        this.curIndex = index
+      },
+      changeCount: function (increment) {
+        let maxDay = 3
+        this.day += increment
+        if (this.day <= 0) {
+          this.day = 1
+        }
+        if (this.day >= maxDay) {
+          this.day = maxDay
+        }
+      },
+      showDetail: function (order) {
+        this.$router.load({url: `/gardener/detail/${order.shopper_id}/${order.order_id}`})
+      }
+    },
+    components: {Counter, MyMap}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/gardener/gardener.scss";
+
     @import "../../css/gardener/orderList.scss";
 </style>
 

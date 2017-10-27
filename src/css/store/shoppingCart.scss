@@ -1,5 +1,4 @@
 @import "../globalFunc";
-@import "../global_icon/global_icon";
 
 .shoppingCart {
   @include setFontSize($baseFontSize);
@@ -88,6 +87,19 @@
           }
         }
 
+      }
+      .goods-title {
+        display: table;
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        color: $theme_color;
+        @include setFontSize($maxFontSize);
+        padding: 0 35px;
+        background-color: #EEEEEE;
+        .checkAll-label {
+          padding-left: 10px;
+        }
       }
 
     }

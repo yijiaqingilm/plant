@@ -1,11 +1,27 @@
-@import "../../css/global.scss";
+@import "../../css/globalFunc";
 
-.typeSelector{
+.typeSelector {
   .item {
     margin-right: 30px;
-    &.no-bg{
+    &.no-bg {
       background-color: #FFFFFF;
       padding: 0;
     }
   }
+  &.week-list {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px 35px;
+    flex-wrap: wrap;
+    &:after {
+      @include onepx;
+    }
+    > span {
+      margin-bottom: 20px;
+      margin-right: 0;
+    }
+  }
 }
+

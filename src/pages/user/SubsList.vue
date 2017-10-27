@@ -8,16 +8,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import UserSubsOrderList from 'section/user/subsOrderList/subsOrderList.vue';
-    export default {
-        data(){
-            return {
-                data: [{name: 'xx'}]
-            }
-        },
-        components: {UserSubsOrderList}
-    }
+  import UserSubsOrderList from 'section/user/subsOrderList/subsOrderList.vue'
+
+  export default {
+    data () {
+      return {
+        data: [{name: 'xx'}]
+      }
+    },
+    components: {UserSubsOrderList}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/user/user.scss";
+
 </style>

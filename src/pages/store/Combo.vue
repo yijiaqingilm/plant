@@ -78,116 +78,116 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {userApi} from 'api'
-    import {Cache} from 'lib/utils'
-    import {goodsType, wx_share, gotoCart} from 'lib/common'
-    import TypeSelector from 'components/typeSelector/typeSelector.vue';
-    import Counter from 'components/counter/counter.vue';
-    import wx from 'wx'
+  import { userApi } from 'api'
+  import { Cache } from 'lib/utils'
+  import { goodsType, wx_share, gotoCart } from 'lib/common'
+  import TypeSelector from 'components/typeSelector/typeSelector.vue'
+  import Counter from 'components/counter/counter.vue'
+  import wx from 'wx'
 
-    export default {
-        data() {
-            return {
-                curGoods: {
-                    amount: 1,
-                },
-                goods: {},
-                goodsType: goodsType,
-                comboId: -1,
-                cartCount: 0,
-            }
+  let icon_success = require('../../assets/icon-gou.png')
+  export default {
+    data () {
+      return {
+        curGoods: {
+          amount: 1,
         },
-        created: function () {
-            console.log(goodsType.lease, goodsType.buy)
-            this.comboId = this.$route.params.comboId;
-            userApi.comboDetail(this.comboId).then(result => {
-                console.log('data', result);
-                this.goods = result.data;
-                this.$nextTick(() => {
-                    var mySwiper = this.$f7.swiper('.banners-top', {
-                        pagination: '.swiper-pagination',
-                        speed: 500,
-                        autoplay: 2000
-                    });
-                    this.$f7.swiper('.banners-goods-img', {
-                        pagination: '.swiper-pagination2',
-                        slidesPerView: 4.5,
-                        paginationClickable: true,
-                        spaceBetween: 5,
-                        freeMode: true
-                        /*slidesPerView: 3*/
-                    });
+        goods: {},
+        goodsType: goodsType,
+        comboId: -1,
+        cartCount: 0,
+      }
+    },
+    created: function () {
+      this.comboId = this.$route.params.comboId
+      userApi.comboDetail(this.comboId).then((result) => {
+        this.goods = result.data
+        this.$nextTick(() => {
+          var mySwiper = this.$f7.swiper('.banners-top', {
+            pagination: '.swiper-pagination',
+            speed: 500,
+            autoplay: 2000
+          })
+          this.$f7.swiper('.banners-goods-img', {
+            pagination: '.swiper-pagination2',
+            slidesPerView: 4.5,
+            paginationClickable: true,
+            spaceBetween: 5,
+            freeMode: true
+            /* slidesPerView: 3*/
+          })
 
-                });
-                setTimeout(() => {
-                    wx.ready(() => {
-                        var that = this;
-                        var title = that.goods.name;
-                        var desc = that.goods.brief;
-                        var imgUrl = "http://images.zhuzhulz.com/share3.jpg";
-                        var link = location.protocol + "//" + location.host + "/#" + location.href.split('#')[1];
-                        wx_share(title, link, imgUrl, desc);
+        })
+        let step = 500
+        setTimeout(() => {
+          window.wx.ready(() => {
+            var that = this
+            var title = that.goods.name
+            var desc = that.goods.brief
+            var imgUrl = 'http://images.zhuzhulz.com/share3.jpg'
+            var link = location.protocol + '//' + location.host + '/#' + location.href.split('#')[1]
+            wx_share(title, link, imgUrl, desc)
 
-                    });
-                }, 500)
+          })
+        }, step)
 
-            });
-            userApi.getCartNum().then(result => {
-                this.cartCount = result.data;
-            });
+      })
+      userApi.getCartNum().then((result) => {
+        this.cartCount = result.data
+      })
 
-        },
-        methods: {
-            goCart() {
-                gotoCart(this);
-            },
-            alertDeposit() {
-                this.$f7.alert('租赁期满将进行绿植核查，<br>如无损坏缺失押金将全额退还');
-            },
-            reinit() {
-                userApi.getCartNum().then(result => {
-                    this.cartCount = result.data;
-                });
-                wx.ready(() => {
-                    var that = this;
-                    var title = that.goods.name;
-                    var desc = that.goods.brief;
-                    var imgUrl = "http://images.zhuzhulz.com/share3.jpg";
-                    var link = location.protocol + "//" + location.host + "/#" + location.href.split('#')[1];
-                    wx_share(title, link, imgUrl, desc);
+    },
+    methods: {
+      goCart () {
+        gotoCart(this)
+      },
+      alertDeposit () {
+        this.$f7.alert('租赁期满将进行绿植核查，<br>如无损坏缺失押金将全额退还')
+      },
+      reinit () {
+        userApi.getCartNum().then((result) => {
+          this.cartCount = result.data
+        })
+        wx.ready(() => {
+          var that = this
+          var title = that.goods.name
+          var desc = that.goods.brief
+          var imgUrl = 'http://images.zhuzhulz.com/share3.jpg'
+          var link = location.protocol + '//' + location.host + '/#' + location.href.split('#')[1]
+          wx_share(title, link, imgUrl, desc)
 
-                });
-            },
-            addCart() {
-                this.curGoods.attrIds = [];
-                for (let key in this.curGoods.attr) {
-                    this.curGoods.attrIds.push(this.curGoods.attr[key].id);
-                }
-                Object.assign(this.curGoods, {
-                    type: this.goods.type,
-                    composite_id: this.comboId,
-                });
-                console.log('curgoods', this.curGoods);
-                userApi.addCart(this.curGoods).then(result => {
-                    let icon_success = require('../../assets/icon-gou.png');
-                    this.cartCount += this.curGoods.amount;
-                    var modal = this.$f7.modal({
-                        title: '',
-                        text: '<div><img src="' + icon_success + '" class="icon_success"></div><div>加入购物车成功</div>',
-                    })
-                    setTimeout(() => {
-                        this.$f7.closeModal(modal);
-                    }, 2000);
-                })
-            }
-        },
-        computed: {},
-        components: {TypeSelector, Counter}
-    }
+        })
+      },
+      addCart () {
+        this.curGoods.attrIds = []
+        for (let key in this.curGoods.attr) {
+          if (this.curGoods.attr.hasOwnProperty(key)) {
+            this.curGoods.attrIds.push(this.curGoods.attr[key].id)
+          }
+
+        }
+        Object.assign(this.curGoods, {
+          type: this.goods.type,
+          composite_id: this.comboId,
+        })
+        userApi.addCart(this.curGoods).then((result) => {
+          this.cartCount += this.curGoods.amount
+          var modal = this.$f7.modal({
+            title: '',
+            text: '<div><img src="' + icon_success + '" class="icon_success"></div><div>加入购物车成功</div>',
+          })
+          let step = 2000
+          setTimeout(() => {
+            this.$f7.closeModal(modal)
+          }, step)
+        })
+      }
+    },
+    computed: {},
+    components: {TypeSelector, Counter}
+  }
 </script>
 <style lang="scss" scoped type="text/css">
-    @import "../../css/store/store.scss";
     @import "../../css/store/goodsDetail.scss";
-
 </style>
 

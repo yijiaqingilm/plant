@@ -5,18 +5,8 @@
  * Created by Administrator on 2017/4/28.
  */
 var loadbygeomanerViewName = function (name) {
-    return require(`src/pages/geomaner/${name}.vue`);
-    /*return () => {
-        return new Promise((resolve, reject) => {
-            require.ensure([], () => {
-                resolve(require(`src/pages/geomaner/${name}.vue`));
-
-            },'geo-info')
-        });
-
-    }*/
-
+  return () => import(/* webpackChunkName: "geomaner-info" */ `src/pages/geomaner/${name}.vue`)
 }
 export default [
-    {path: '/geomaner/list', component: loadbygeomanerViewName('GeoList')},
+  {path: '/geomaner/list', component: loadbygeomanerViewName('GeoList')}
 ]
